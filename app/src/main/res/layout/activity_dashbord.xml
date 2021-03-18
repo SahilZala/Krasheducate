@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Dashbord"
+    android:background="@color/black_mate_2">
+
+
+    <androidx.core.widget.NestedScrollView android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="15dp"
+        android:id="@+id/nested_scrollbar"
+        >
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:gravity="center"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Dashboard"
+                    android:textColor="@color/cream_white"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="22dp"
+                    />
+                </RelativeLayout>
+
+               <RelativeLayout
+                   android:gravity="right"
+                   android:layout_height="wrap_content"
+                   android:layout_width="match_parent">
+                   <ImageButton
+                       android:layout_height="wrap_content"
+                       android:layout_width="wrap_content"
+                       android:background="@drawable/profile"
+                       />
+               </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <View android:layout_height="40dp"
+                android:layout_width="0dp" />
+
+
+            <RelativeLayout android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Hello,"
+                    android:textColor="@color/cream_white"
+                    android:textSize="40dp"
+                    android:fontFamily="@font/roboto_bold"
+                    />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Sahil Zala"
+                    android:textColor="@color/cream_white"
+                    android:textSize="40dp"
+                    android:fontFamily="@font/roboto_bold"
+                    />
+
+            </RelativeLayout>
+
+
+            <View android:layout_height="20dp"
+                android:layout_width="0dp" />
+
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <com.google.android.material.button.MaterialButton
+                    android:backgroundTint="@color/black_mate_2"
+                    android:id="@+id/notes_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Nots"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textColor="@color/dark_grey_mate_2"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingTop="5dp"
+                    app:cornerRadius="15dp"
+
+
+                    />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:backgroundTint="@color/smooth_ligh_blue"
+                    android:id="@+id/video_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="videos"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:textColor="@color/cream_white"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingTop="5dp"
+                    app:cornerRadius="15dp"
+                />
+
+            </LinearLayout>
+
+            <View
+                android:layout_height="20dp"
+                android:layout_width="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/subject_recycler_view"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+</RelativeLayout>
