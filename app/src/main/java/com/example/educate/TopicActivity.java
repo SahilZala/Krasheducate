@@ -6,6 +6,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -78,6 +79,15 @@ public class TopicActivity extends AppCompatActivity {
 
         topic_recycler_view.scrollToPosition(0);
         topic_scrollView.getParent().requestChildFocus(topic_scrollView,topic_scrollView);
+
+        topicAdapter.setOnItemClickListener(new AdapterTopicList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, TopicClass obj, int position) {
+                if(obj.type.equals("link")) {
+                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("link",obj.getLink()));
+                }
+            }
+        });
 
     }
 

@@ -74,7 +74,7 @@ public class OriginalViewHolder extends RecyclerView.ViewHolder {
             }
 
             //    Tools.displayImageRound(ctx, view.image, p.image);
-            view.lyt_parent.setOnClickListener(new View.OnClickListener() {
+            view.enter_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnItemClickListener != null) {
