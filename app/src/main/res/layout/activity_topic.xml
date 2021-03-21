@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TopicActivity"
+    android:background="@drawable/gradient_demo">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="15dp"
+        android:id="@+id/topic_nested_scrollview"
+        >
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <RelativeLayout
+                    android:gravity="center"
+                    android:layout_height="30dp"
+                    android:layout_width="wrap_content">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_baseline_arrow_back_24" />
+                </RelativeLayout>
+
+                <View android:layout_height="0dp"
+                    android:layout_width="5dp" />
+                <RelativeLayout
+                    android:gravity="left"
+                    android:layout_height="30dp"
+                    android:layout_width="wrap_content">
+                    <TextView
+                        android:id="@+id/topic_back"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="back"
+                        android:textColor="@color/cream_white"
+                        android:fontFamily="@font/roboto_light"
+                        android:textSize="22dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:gravity="right"
+                    android:layout_height="30dp"
+                    android:layout_width="match_parent">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Topics"
+                        android:textColor="@color/cream_white"
+                        android:fontFamily="@font/roboto_bold"
+                        android:textSize="22dp"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+
+
+
+            <View android:layout_height="50dp"
+                android:layout_width="match_parent" />
+            <androidx.cardview.widget.CardView
+                app:cardBackgroundColor="@color/smooth_ligh_blue"
+                app:cardCornerRadius="20dp"
+                android:layout_height="20dp"
+                android:layout_width="20dp"
+
+                >
+
+                <androidx.cardview.widget.CardView
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@color/cream_white"
+                    app:cardCornerRadius="10dp"
+                    android:layout_height="10dp"
+                    android:layout_width="10dp" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <RelativeLayout android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <TextView
+                    android:id="@+id/topic_name"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Videos"
+                    android:textColor="@color/cream_white"
+                    android:textSize="40dp"
+                    android:fontFamily="@font/roboto_bold"
+                    />
+
+            </RelativeLayout>
+
+
+
+
+
+
+            <View
+                android:layout_height="20dp"
+                android:layout_width="20dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/topic_recycler_view"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

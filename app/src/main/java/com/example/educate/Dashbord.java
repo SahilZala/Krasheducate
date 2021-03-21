@@ -1,11 +1,13 @@
 package com.example.educate;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,16 +17,23 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class Dashbord extends AppCompatActivity {
 
     RecyclerView subject_recycler_view;
-    ArrayList<String> subjectClassArrayList;
     Button notes,video;
     int is_not = 0;
 
     NestedScrollView scrollView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +45,15 @@ public class Dashbord extends AppCompatActivity {
         //decalration
 
         subject_recycler_view = findViewById(R.id.subject_recycler_view);
-        subjectClassArrayList = new ArrayList<>();
+
         notes = findViewById(R.id.notes_button);
         video = findViewById(R.id.video_button);
 
         scrollView = findViewById(R.id.nested_scrollbar);
+
         //
-        adaptVideo();
+
+        fetchDataFromFirebase();
 
         notes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,35 +127,88 @@ public class Dashbord extends AppCompatActivity {
 
     void adaptVideo()
     {
-        subjectClassArrayList.clear();
-        subjectClassArrayList.add("Math");
-        subjectClassArrayList.add("Computer");
-
         subject_recycler_view.setLayoutManager(new LinearLayoutManager(this));
         subject_recycler_view.setHasFixedSize(true);
 
         //set data and list adapter
-        AdapterSubjectList subjectAdapter = new AdapterSubjectList(this,subjectClassArrayList);
+        AdapterSubjectList subjectAdapter = new AdapterSubjectList(this,v);
         subject_recycler_view.setAdapter(subjectAdapter);
 
         subject_recycler_view.scrollToPosition(0);
 
         scrollView.getParent().requestChildFocus(scrollView,scrollView);
+
+        subjectAdapter.setOnItemClickListener(new AdapterSubjectList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, SubjectClass obj, int position) {
+                startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("type","Video"));
+            }
+        });
     }
     void adaptNotes()
     {
-        subjectClassArrayList.clear();
-        subjectClassArrayList.add("Science");
 
 
         subject_recycler_view.setLayoutManager(new LinearLayoutManager(this));
         subject_recycler_view.setHasFixedSize(true);
 
         //set data and list adapter
-        AdapterSubjectList subjectAdapter = new AdapterSubjectList(this,subjectClassArrayList);
+        AdapterSubjectList subjectAdapter = new AdapterSubjectList(this,n);
         subject_recycler_view.setAdapter(subjectAdapter);
 
         subject_recycler_view.scrollToPosition(0);
         scrollView.getParent().requestChildFocus(scrollView,scrollView);
+
+
+        subjectAdapter.setOnItemClickListener(new AdapterSubjectList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, SubjectClass obj, int position) {
+                startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("type","Notes"));
+            }
+        });
+    }
+
+
+    DatabaseReference dref;
+    ArrayList<SubjectClass> v,n;
+    void fetchDataFromFirebase()
+    {
+        v = new ArrayList<>();
+        n = new ArrayList<>();
+
+
+        dref = FirebaseDatabase.getInstance().getReference("Subject");
+        dref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                v.clear();
+                n.clear();
+                for(DataSnapshot ds:snapshot.getChildren()){
+                    SubjectClass sc = ds.getValue(SubjectClass.class);
+
+                    if(sc.type.equals("link"))
+                    {
+                        v.add(sc);
+                    }
+                    else
+                    {
+                        n.add(sc);
+                    }
+
+                }
+                if(is_not == 0) {
+                    adaptVideo();
+                }
+                else{
+                    adaptNotes();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

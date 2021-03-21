@@ -46,7 +46,7 @@
 
                 <TextView
                     android:id="@+id/item_subject_name"
-                    android:maxLength="18"
+                    android:maxLength="15"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="Subject Name"
@@ -124,6 +124,7 @@
 
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/subject_enter"
                 android:backgroundTint="#B144D4"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
