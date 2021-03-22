@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +41,7 @@ public class TopicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic);
 
+        getNotificationColor();
         subjectid = getIntent().getStringExtra("subjectid");
 
         type = getIntent().getStringExtra("type");
@@ -86,6 +90,10 @@ public class TopicActivity extends AppCompatActivity {
                 if(obj.type.equals("link")) {
                     startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("link",obj.getLink()));
                 }
+                else
+                {
+                    startActivity(new Intent(getApplicationContext(), PDFViewerActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("topicid",obj.getTopicid()));
+                }
             }
         });
 
@@ -114,4 +122,15 @@ public class TopicActivity extends AppCompatActivity {
             }
         });
     }
+
+    void getNotificationColor()
+    {
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.black_mate));
+        }
+    }
+
 }

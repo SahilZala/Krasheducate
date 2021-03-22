@@ -24,8 +24,11 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
     YouTubePlayerView youTubePlayerView;
     YouTubePlayer.OnInitializedListener onInitializedListener;
 
+    YouTubePlayer ytp;
+
     Button p;
     String data = "";
+    TimerCounter tc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +36,13 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
         getNotificationColor();
 
+        tc = new TimerCounter();
+        tc.start();
         Log.d(TAG,"onCreate! Starting:");
         data = getIntent().getStringExtra("link");
 
 
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
-
 
         onInitializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
@@ -46,7 +50,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
                 youTubePlayer.loadVideo(data);
                 youTubePlayer.setShowFullscreenButton(false);
-
+                ytp = youTubePlayer;
             }
 
             @Override
@@ -77,7 +81,6 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
         if(b) {
             youTubePlayer.loadVideo(data);
-
         }
 
     }
@@ -85,5 +88,126 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //tc.start();
+        Toast.makeText(VideoPlayer.this, ""+tc.sec, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+        Toast.makeText(this, ""+ytp.getCurrentTimeMillis()/1000, Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, ""+tc.sec, Toast.LENGTH_SHORT).show();
+
+        ytp.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
+            @Override
+            public void onPlaying() {
+
+            }
+
+            @Override
+            public void onPaused() {
+
+            }
+
+            @Override
+            public void onStopped() {
+
+            }
+
+            @Override
+            public void onBuffering(boolean b) {
+
+            }
+
+            @Override
+            public void onSeekTo(int i) {
+
+            }
+        });
+
+
+        ytp.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+            @Override
+            public void onLoading() {
+
+            }
+
+            @Override
+            public void onLoaded(String s) {
+
+            }
+
+            @Override
+            public void onAdStarted() {
+
+            }
+
+            @Override
+            public void onVideoStarted() {
+
+            }
+
+            @Override
+            public void onVideoEnded() {
+
+            }
+
+            @Override
+            public void onError(YouTubePlayer.ErrorReason errorReason) {
+
+            }
+        });
+        tc.stopThread();
+
+    }
+}
+class TimerCounter extends Thread
+{
+    int sec = 0;
+
+    boolean exit = true;
+
+    public void run(){
+        while(exit)
+        {
+            try {
+                sleep(1000);
+
+                sec++;
+                Log.d(String.valueOf(sec),String.valueOf(sec));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void stopThread()
+    {
+        exit = false;
+    }
+
+    public void startAgain()
+    {
+        exit = true;
     }
 }
