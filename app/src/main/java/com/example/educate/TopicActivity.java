@@ -33,7 +33,7 @@ public class TopicActivity extends AppCompatActivity {
 
     String subjectid = "";
 
-    String type = "";
+    String type = "",userid = "";
 
 
     @Override
@@ -43,8 +43,8 @@ public class TopicActivity extends AppCompatActivity {
 
         getNotificationColor();
         subjectid = getIntent().getStringExtra("subjectid");
-
         type = getIntent().getStringExtra("type");
+        userid = getIntent().getStringExtra("userid");
 
         //declaration
 
@@ -88,7 +88,7 @@ public class TopicActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, TopicClass obj, int position) {
                 if(obj.type.equals("link")) {
-                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("link",obj.getLink()));
+                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("link",obj.getLink()).putExtra("userid",userid));
                 }
                 else
                 {

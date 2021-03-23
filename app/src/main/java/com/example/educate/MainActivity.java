@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(userData != null)
                 {
-                    startActivity(new Intent(getApplicationContext(),Dashbord.class));
+                    startActivity(new Intent(getApplicationContext(),Dashbord.class).putExtra("userid",userData.userid));
                 }
                 else
                 {

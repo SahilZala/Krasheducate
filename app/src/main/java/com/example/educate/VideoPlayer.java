@@ -1,5 +1,6 @@
 package com.example.educate;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.pm.ActivityInfo;
@@ -16,6 +17,11 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
@@ -28,7 +34,8 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
     Button p;
     String data = "";
-    TimerCounter tc;
+    TimerCounter vp,st;
+    String userid = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +43,13 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
         getNotificationColor();
 
-        tc = new TimerCounter();
-        tc.start();
+        vp = new TimerCounter();
+        st = new TimerCounter();
+        st.start();
         Log.d(TAG,"onCreate! Starting:");
         data = getIntent().getStringExtra("link");
 
+        userid = getIntent().getStringExtra("userid");
 
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 
@@ -51,6 +60,79 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
                 youTubePlayer.loadVideo(data);
                 youTubePlayer.setShowFullscreenButton(false);
                 ytp = youTubePlayer;
+
+                youTubePlayer.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
+                    @Override
+                    public void onPlaying() {
+
+                        vp.startAgain();
+                       // Toast.makeText(VideoPlayer.this, "onPlaying() "+vp.sec, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPaused() {
+
+                        vp.pauseNode();
+                      //  Toast.makeText(VideoPlayer.this, "onPaued()", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onStopped() {
+
+                        //vp.stopThread();
+                        //Toast.makeText(VideoPlayer.this, "onStoped()", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onBuffering(boolean b) {
+                       // Toast.makeText(VideoPlayer.this, "onBuffering()", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSeekTo(int i) {
+                        //Toast.makeText(VideoPlayer.this, "onSeekedTo()", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+                    @Override
+                    public void onLoading() {
+//                        Toast.makeText(VideoPlayer.this, "onVideoLoading()", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onLoaded(String s) {
+
+                        //Toast.makeText(VideoPlayer.this, "onLoading()", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onAdStarted() {
+                       // Toast.makeText(VideoPlayer.this, "onAddStarted()", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onVideoStarted() {
+
+                        vp.start();
+                        //Toast.makeText(VideoPlayer.this, "onVideoStarted() "+vp.sec, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onVideoEnded() {
+
+                        Toast.makeText(VideoPlayer.this, "onVideoEnded()", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(YouTubePlayer.ErrorReason errorReason) {
+                        Toast.makeText(VideoPlayer.this, "onVideoError()", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
             }
 
             @Override
@@ -91,94 +173,50 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        //tc.start();
-        Toast.makeText(VideoPlayer.this, ""+tc.sec, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
 
+        Log.d("tag","Screen time = "+String.valueOf(st.sec));
+        Log.d("tag","video playing = "+String.valueOf(vp.sec));
+        Log.d("tag","Video State = "+String.valueOf(ytp.getCurrentTimeMillis()/1000));
 
-        Toast.makeText(this, ""+ytp.getCurrentTimeMillis()/1000, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Screen time = "+String.valueOf(st.sec), Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(this, ""+tc.sec, Toast.LENGTH_SHORT).show();
+        double v = (Double.parseDouble(String.valueOf(st.sec)) - (1-(Double.parseDouble(String.valueOf(vp.sec))/(Double.parseDouble(String.valueOf(ytp.getCurrentTimeMillis()/1000))))))/100;
 
-        ytp.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
+        putDataInFirebase(v);
+
+        Toast.makeText(this, "Point score = "+String.valueOf(v), Toast.LENGTH_SHORT).show();
+
+
+        st.stopThread();
+        vp.stopThread();
+    }
+
+
+    DatabaseReference dref;
+
+    void putDataInFirebase(double da)
+    {
+        dref = FirebaseDatabase.getInstance().getReference("UserData").child(userid);
+        dref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            double val = 0;
             @Override
-            public void onPlaying() {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserData ud = snapshot.getValue(UserData.class);
+                String point = ud.getPoints();
 
+                val = Double.parseDouble(point);
+
+                dref.child("points").setValue(String.valueOf(val+da));
             }
 
             @Override
-            public void onPaused() {
-
-            }
-
-            @Override
-            public void onStopped() {
-
-            }
-
-            @Override
-            public void onBuffering(boolean b) {
-
-            }
-
-            @Override
-            public void onSeekTo(int i) {
-
-            }
-        });
-
-
-        ytp.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
-            @Override
-            public void onLoading() {
-
-            }
-
-            @Override
-            public void onLoaded(String s) {
-
-            }
-
-            @Override
-            public void onAdStarted() {
-
-            }
-
-            @Override
-            public void onVideoStarted() {
-
-            }
-
-            @Override
-            public void onVideoEnded() {
-
-            }
-
-            @Override
-            public void onError(YouTubePlayer.ErrorReason errorReason) {
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-        tc.stopThread();
-
     }
 }
 class TimerCounter extends Thread
@@ -187,14 +225,22 @@ class TimerCounter extends Thread
 
     boolean exit = true;
 
+    boolean ispaused = true;
+
     public void run(){
         while(exit)
         {
             try {
-                sleep(1000);
+                if(ispaused) {
+                    sleep(1000);
 
-                sec++;
-                Log.d(String.valueOf(sec),String.valueOf(sec));
+                    sec++;
+                    Log.d(String.valueOf(sec), String.valueOf(sec));
+                }
+                else
+                {
+                    Log.d(String.valueOf(sec), String.valueOf(sec));
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -208,6 +254,10 @@ class TimerCounter extends Thread
 
     public void startAgain()
     {
-        exit = true;
+        ispaused = true;
+    }
+    public void pauseNode()
+    {
+       ispaused = false;
     }
 }

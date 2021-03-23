@@ -1,18 +1,19 @@
 package com.example.educate;
 
 public class UserData {
-    String userid,username,mobileno,password,time,date,activation;
+    String userid,username,mobileno,password,time,date,points,activation;
 
     public UserData() {
     }
 
-    public UserData(String userid, String username, String mobileno, String password, String time, String date, String activation) {
+    public UserData(String userid, String username, String mobileno, String password, String time, String date, String points, String activation) {
         this.userid = userid;
         this.username = username;
         this.mobileno = mobileno;
         this.password = password;
         this.time = time;
         this.date = date;
+        this.points = points;
         this.activation = activation;
     }
 
@@ -62,6 +63,14 @@ public class UserData {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getPoints() {
+        return points;
+    }
+
+    public void setPoints(String points) {
+        this.points = points;
     }
 
     public String getActivation() {

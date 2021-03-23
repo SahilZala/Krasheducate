@@ -34,6 +34,8 @@ public class Dashbord extends AppCompatActivity {
     NestedScrollView scrollView;
 
 
+    String userid="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class Dashbord extends AppCompatActivity {
 
         //decalration
 
+        userid = getIntent().getStringExtra("userid");
         subject_recycler_view = findViewById(R.id.subject_recycler_view);
 
         notes = findViewById(R.id.notes_button);
@@ -141,7 +144,7 @@ public class Dashbord extends AppCompatActivity {
         subjectAdapter.setOnItemClickListener(new AdapterSubjectList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, SubjectClass obj, int position) {
-                startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("type","Video"));
+                startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("type","Video").putExtra("userid",userid));
             }
         });
     }
@@ -163,7 +166,7 @@ public class Dashbord extends AppCompatActivity {
         subjectAdapter.setOnItemClickListener(new AdapterSubjectList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, SubjectClass obj, int position) {
-                startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("type","Notes"));
+                startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("type","Notes").putExtra("userid",userid));
             }
         });
     }
