@@ -14,7 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Educate">
-        <activity android:name=".PDFViewerActivity"></activity>
+        <activity android:name=".SubjectActivity"></activity>
+        <activity android:name=".NewDashbord" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".Profile" />
+        <activity android:name=".PDFViewerActivity" />
         <activity
             android:name=".VideoPlayer"
             android:screenOrientation="landscape" />

@@ -37,8 +37,6 @@ public class PDFViewerActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
 
-    TimerCounter tc;
-
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +58,7 @@ public class PDFViewerActivity extends AppCompatActivity {
         pdfView.setBackgroundColor(R.color.black_mate_2);
 
         getPdfData();
-        tc = new TimerCounter();
+
 
 
     }
@@ -96,7 +94,6 @@ public class PDFViewerActivity extends AppCompatActivity {
                 @Override
                 public void loadComplete(int nbPages) {
                     progressBar.setVisibility(View.INVISIBLE);
-                    tc.start();
                 }
             }).load();
         }
@@ -138,25 +135,5 @@ public class PDFViewerActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Toast.makeText(this, ""+tc.sec, Toast.LENGTH_SHORT).show();
-    }
 
-    class TimerCounter extends Thread
-    {
-        int sec = 0;
-        public void run(){
-            while(true)
-            {
-                try {
-                    sleep(1000);
-                    sec++;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

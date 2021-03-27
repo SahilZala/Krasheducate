@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    android:background="@color/cream_white">
+
+    <RelativeLayout
+        android:padding="20dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:id="@+id/textView01"
+                            android:text="Do you wants to logout ?"
+                            android:textColor="@color/black_mate_2"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="18dp"
+
+                            />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:gravity="right"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+                        <ImageButton
+                            android:background="@drawable/ic_baseline_cancel_24"
+                            android:gravity="right"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/cancel_dialog"
+                            android:textColor="@color/black_mate_2"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="18dp"
+
+                            />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View android:layout_height="20dp"
+                    android:layout_width="0dp"/>
+
+                <RelativeLayout android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    >
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/logout"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/sky_blue"
+                        android:fontFamily="@font/roboto_bold"
+                        android:paddingTop="5dp"
+                        android:text="LOGOUT"
+                        android:textColor="@color/cream_white"
+                        app:cornerRadius="5dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

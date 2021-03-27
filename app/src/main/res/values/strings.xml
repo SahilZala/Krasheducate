@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">educate</string>
+    <string name="subject">Subject List</string>
 </resources>

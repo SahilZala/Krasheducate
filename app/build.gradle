@@ -63,5 +63,8 @@ dependencies {
 
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    implementation 'com.mikhaellopez:circularimageview:3.2.0'          // circle image view
+    implementation 'com.balysv:material-ripple:1.0.2'
+
 }
 apply plugin: 'com.google.gms.google-services'

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,7 +51,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
         Log.d(TAG,"onCreate! Starting:");
         data = getIntent().getStringExtra("link");
 
-        userid = getIntent().getStringExtra("userid");
+        userid = getOUid();
 
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 
@@ -120,12 +122,13 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
                     @Override
                     public void onVideoEnded() {
-
-                        Toast.makeText(VideoPlayer.this, "onVideoEnded()", Toast.LENGTH_SHORT).show();
+                        vp.pauseNode();
+                        Toast.makeText(VideoPlayer.this, "video ended", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(YouTubePlayer.ErrorReason errorReason) {
+                        vp.pauseNode();
                         Toast.makeText(VideoPlayer.this, "onVideoError()", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -180,17 +183,20 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
         Log.d("tag","video playing = "+String.valueOf(vp.sec));
         Log.d("tag","Video State = "+String.valueOf(ytp.getCurrentTimeMillis()/1000));
 
-        Toast.makeText(this, "Screen time = "+String.valueOf(st.sec), Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(this, "Screen time = "+String.valueOf(st.sec), Toast.LENGTH_SHORT).show();
 
         double v = (Double.parseDouble(String.valueOf(st.sec)) - (1-(Double.parseDouble(String.valueOf(vp.sec))/(Double.parseDouble(String.valueOf(ytp.getCurrentTimeMillis()/1000))))))/100;
-
-        putDataInFirebase(v);
-
-        Toast.makeText(this, "Point score = "+String.valueOf(v), Toast.LENGTH_SHORT).show();
 
 
         st.stopThread();
         vp.stopThread();
+
+        putDataInFirebase(v);
+
+       Toast.makeText(this, "Point score = "+String.valueOf(v), Toast.LENGTH_SHORT).show();
+
+       finish();
+
     }
 
 
@@ -209,7 +215,9 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
                 val = Double.parseDouble(point);
 
-                dref.child("points").setValue(String.valueOf(val+da));
+                if(da > 0) {
+                    dref.child("points").setValue(String.valueOf(val + da));
+                }
             }
 
             @Override
@@ -218,6 +226,22 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
             }
         });
     }
+
+    SQLiteDatabase db;
+    String getOUid()
+    {
+        Cursor c = null;
+        String i = "";
+        db = openOrCreateDatabase("UserData", MODE_PRIVATE, null);
+        db.execSQL("create table if not exists userdata (aid text,val text,uid text,uemai text,uname text,umobile text,utype text);");
+        c = db.rawQuery("select * from userdata;", null);
+        c.moveToFirst();
+        for (int ii = 0; c.moveToPosition(ii); ii++) {
+            i = c.getString(0);
+        }
+        return i;
+    }
+
 }
 class TimerCounter extends Thread
 {

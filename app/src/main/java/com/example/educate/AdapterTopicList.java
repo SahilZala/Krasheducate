@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,15 +36,17 @@ public interface OnItemClickListener {
     }
 
 public class OriginalViewHolder extends RecyclerView.ViewHolder {
-    public TextView name;
-    public View lyt_parent;
-    public MaterialButton enter_button;
+    public TextView name,index,desc;
+
+    public ImageButton enter_button;
 
     public OriginalViewHolder(View v) {
         super(v);
         name = (TextView) v.findViewById(R.id.item_topic_name);
-        lyt_parent = (View) v.findViewById(R.id.lyt_parent);
-        enter_button = v.findViewById(R.id.enter_button);
+        index = v.findViewById(R.id.topic_index);
+        desc = v.findViewById(R.id.topic_desc);
+
+        enter_button = v.findViewById(R.id.topic_enter);
     }
 }
 
@@ -63,13 +66,15 @@ public class OriginalViewHolder extends RecyclerView.ViewHolder {
 
             TopicClass p = items.get(position);
             view.name.setText(p.name);
+            view.desc.setText(p.description);
+            view.index.setText(String.valueOf(position+1));
 
             if(p.type.equals("link")){
-                view.enter_button.setIconResource(R.drawable.ic_baseline_video_library_24);
+                view.enter_button.setImageResource(R.drawable.ic_baseline_video_library_24);
             }
             else
             {
-                view.enter_button.setIconResource(R.drawable.ic_baseline_insert_drive_file_24);
+                view.enter_button.setImageResource(R.drawable.ic_baseline_insert_drive_file_24);
 
             }
 

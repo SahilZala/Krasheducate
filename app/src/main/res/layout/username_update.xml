@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    android:background="@color/cream_white">
+
+    <RelativeLayout
+        android:padding="20dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal">
+
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:id="@+id/textView01"
+                            android:text="Update Username"
+                            android:textColor="@color/black_mate_2"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="16dp"
+
+                            />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:gravity="right"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent">
+                        <ImageButton
+                            android:background="@drawable/ic_baseline_cancel_24"
+                            android:gravity="right"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/cancel_dialog"
+                            android:textColor="@color/black_mate_2"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="18dp"
+
+                            />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_height="30dp"
+                    android:layout_width="0dp" />
+                <RelativeLayout
+                    android:background="@color/cream_white"
+                    android:backgroundTint="@color/cream_white"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        app:startIconDrawable="@drawable/ic_baseline_supervised_user_circle_24"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="user name"
+                        app:hintTextColor="@color/sky_blue"
+                        app:boxStrokeColor="@color/sky_blue"
+
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/cream_white"
+                            android:inputType="text"
+                            android:textSize="15dp"
+                            android:fontFamily="@font/roboto_light"
+                            android:id="@+id/user_name_update"
+                            android:textColor="@color/black_mate"
+                            android:textColorHint="@color/dark_grey_mate"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </RelativeLayout>
+
+                <View android:layout_height="50dp"
+                    android:layout_width="0dp"/>
+
+                <RelativeLayout android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    >
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/username_update"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:backgroundTint="@color/sky_blue"
+                        android:fontFamily="@font/roboto_bold"
+                        android:paddingTop="5dp"
+                        android:text="Continue"
+                        android:textColor="@color/cream_white"
+                        app:cornerRadius="5dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

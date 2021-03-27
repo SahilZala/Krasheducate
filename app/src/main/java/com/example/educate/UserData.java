@@ -1,20 +1,38 @@
 package com.example.educate;
 
 public class UserData {
-    String userid,username,mobileno,password,time,date,points,activation;
+    String userid,username,mobileno,password,mail,profile,time,date,points,activation;
 
     public UserData() {
     }
 
-    public UserData(String userid, String username, String mobileno, String password, String time, String date, String points, String activation) {
+    public UserData(String userid, String username, String mobileno, String password, String mail, String profile, String time, String date, String points, String activation) {
         this.userid = userid;
         this.username = username;
         this.mobileno = mobileno;
         this.password = password;
+        this.mail = mail;
+        this.profile = profile;
         this.time = time;
         this.date = date;
         this.points = points;
         this.activation = activation;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     public String getUserid() {

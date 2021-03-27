@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,14 +34,14 @@ public class AdapterSubjectList extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public View lyt_parent;
-        public Button subject_enter;
+        public TextView name,subject_index,desc;
+        public ImageButton subject_enter;
 
         public OriginalViewHolder(View v) {
             super(v);
             name = (TextView) v.findViewById(R.id.item_subject_name);
-            lyt_parent = (View) v.findViewById(R.id.lyt_parent);
+            desc = v.findViewById(R.id.subject_desc);
+            subject_index = v.findViewById(R.id.subject_index);
             subject_enter = v.findViewById(R.id.subject_enter);
         }
     }
@@ -61,6 +62,8 @@ public class AdapterSubjectList extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             SubjectClass p = items.get(position);
             view.name.setText(p.getName());
+            view.subject_index.setText(String.valueOf(position+1));
+            view.desc.setText(p.getDescription());
 
             //    Tools.displayImageRound(ctx, view.image, p.image);
             view.subject_enter.setOnClickListener(new View.OnClickListener() {
