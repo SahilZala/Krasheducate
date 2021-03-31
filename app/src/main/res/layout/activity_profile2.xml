@@ -30,7 +30,7 @@
                 android:orientation="vertical">
 
                 <View
-                    android:layout_height="30dp"
+                    android:layout_height="15dp"
                     android:layout_width="0dp"/>
 
                 <LinearLayout
@@ -47,7 +47,7 @@
 
                         <RelativeLayout
                             android:gravity="center"
-                            android:background="@drawable/gradient_demo"
+                            android:background="@color/sky_blue"
                             android:layout_height="match_parent"
                             android:layout_width="match_parent">
                             <ImageView
@@ -366,7 +366,7 @@
 
                         <RelativeLayout
                             android:gravity="center"
-                            android:background="@drawable/gradient_demo"
+                            android:background="@color/sky_blue"
                             android:layout_height="match_parent"
                             android:layout_width="match_parent">
                             <ImageView

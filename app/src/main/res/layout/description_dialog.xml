@@ -37,7 +37,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
                             android:id="@+id/textView01"
-                            android:text="Update Username"
+                            android:text="Update Email"
                             android:textColor="@color/black_mate_2"
                             android:fontFamily="@font/roboto_regular"
                             android:textSize="16dp"
@@ -70,65 +70,21 @@
                 <View
                     android:layout_height="30dp"
                     android:layout_width="0dp" />
-                <RelativeLayout
-                    android:background="@color/cream_white"
-                    android:backgroundTint="@color/cream_white"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        app:startIconDrawable="@drawable/ic_baseline_supervised_user_circle_24"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="user name"
-                        app:hintTextColor="@color/black_mate_2"
-                        app:boxStrokeColor="@color/black_mate_2"
-
-                        >
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/cream_white"
-                            android:inputType="text"
-                            android:textSize="15dp"
-                            android:fontFamily="@font/roboto_light"
-                            android:id="@+id/user_name_update"
-                            android:textColor="@color/black_mate"
-                            android:textColorHint="@color/dark_grey_mate"
-                            />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-                </RelativeLayout>
-
-                <View android:layout_height="50dp"
-                    android:layout_width="0dp"/>
-
-                <RelativeLayout android:layout_height="match_parent"
+                <TextView
+                    android:id="@+id/desc_dialog"
                     android:layout_width="match_parent"
-                    android:layout_gravity="bottom"
-                    android:gravity="bottom"
-                    >
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="description"
+                    android:textColor="@color/black_mate_2"
+                    android:textSize="18dp" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/username_update"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:backgroundTint="@color/sky_blue"
-                        android:fontFamily="@font/roboto_bold"
-                        android:paddingTop="5dp"
-                        android:text="Continue"
-                        android:textColor="@color/cream_white"
-                        app:cornerRadius="5dp" />
-
-                </RelativeLayout>
-
-
+                <View
+                    android:layout_height="10dp"
+                    android:layout_width="0dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>

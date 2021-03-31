@@ -85,8 +85,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="user name"
-                    app:hintTextColor="@color/smooth_ligh_blue"
-                    app:boxStrokeColor="@color/dark_blue"
+                    app:hintTextColor="@color/black_mate_2"
+                    app:boxStrokeColor="@color/black_mate_2"
 
                     >
 
@@ -129,8 +129,8 @@
                     android:hint="mobileno"
                     app:endIconMode="custom"
                     app:endIconTint="#008000"
-                    app:hintTextColor="@color/smooth_ligh_blue"
-                    app:boxStrokeColor="@color/dark_blue"
+                    app:hintTextColor="@color/black_mate_2"
+                    app:boxStrokeColor="@color/black_mate_2"
 
 
                     >
@@ -171,8 +171,8 @@
                     android:layout_height="match_parent"
                     android:hint="password"
                     app:passwordToggleEnabled="true"
-                    app:hintTextColor="@color/smooth_ligh_blue"
-                    app:boxStrokeColor="@color/dark_blue"
+                    app:hintTextColor="@color/black_mate_2"
+                    app:boxStrokeColor="@color/black_mate_2"
 
                     >
 
@@ -218,7 +218,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:backgroundTint="@color/smooth_ligh_blue"
+            android:backgroundTint="@color/sky_blue"
             android:fontFamily="@font/roboto_bold"
             android:paddingTop="5dp"
             android:text="Continue"
@@ -227,6 +227,16 @@
 
     </RelativeLayout>
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.FoldingCube"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/smooth_ligh_blue"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

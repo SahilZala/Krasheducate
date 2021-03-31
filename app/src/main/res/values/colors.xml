@@ -37,5 +37,10 @@
     <color name="green_500">#4CAF50</color>
     <color name="light100">#fff5f5f5</color>
 
+    <color name="mate_purple">#8E44AD</color>
+    <color name="mate_yelloe">#F4D03F</color>
+    <color name="choclaty">#6E080F</color>
+
+    <color name="golden_yellow">#F2913D</color>
 
 </resources>

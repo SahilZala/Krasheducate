@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -21,14 +23,24 @@ private List<TopicClass> items = new ArrayList<>();
 
 private Context ctx;
 private com.example.educate.AdapterTopicList.OnItemClickListener mOnItemClickListener;
+private com.example.educate.AdapterTopicList.OnItemClickListener mOnItemClickListener1;
 
 public interface OnItemClickListener {
     void onItemClick(View view, TopicClass obj, int position);
 }
 
+    public interface OnItemClickListener1 {
+        void onItemClick1(View view, TopicClass obj, int position);
+    }
+
     public void setOnItemClickListener(final com.example.educate.AdapterTopicList.OnItemClickListener mItemClickListener) {
         this.mOnItemClickListener = mItemClickListener;
     }
+
+    public void setOnItemClickListener1(final com.example.educate.AdapterTopicList.OnItemClickListener mItemClickListener) {
+        this.mOnItemClickListener1 = mItemClickListener;
+    }
+
 
     public AdapterTopicList(Context context, List<TopicClass> items) {
         this.items = items;
@@ -37,7 +49,7 @@ public interface OnItemClickListener {
 
 public class OriginalViewHolder extends RecyclerView.ViewHolder {
     public TextView name,index,desc;
-
+    public CardView layout_parent;
     public ImageButton enter_button;
 
     public OriginalViewHolder(View v) {
@@ -45,6 +57,7 @@ public class OriginalViewHolder extends RecyclerView.ViewHolder {
         name = (TextView) v.findViewById(R.id.item_topic_name);
         index = v.findViewById(R.id.topic_index);
         desc = v.findViewById(R.id.topic_desc);
+        layout_parent = v.findViewById(R.id.lyt_parent1);
 
         enter_button = v.findViewById(R.id.topic_enter);
     }
@@ -79,7 +92,7 @@ public class OriginalViewHolder extends RecyclerView.ViewHolder {
             }
 
             //    Tools.displayImageRound(ctx, view.image, p.image);
-            view.enter_button.setOnClickListener(new View.OnClickListener() {
+            view.layout_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnItemClickListener != null) {
@@ -87,6 +100,16 @@ public class OriginalViewHolder extends RecyclerView.ViewHolder {
                     }
                 }
             });
+
+            view.enter_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mOnItemClickListener1 != null) {
+                        mOnItemClickListener1.onItemClick(view, items.get(position), position);
+                    }
+                }
+            });
+
         }
 
     }
@@ -95,6 +118,5 @@ public class OriginalViewHolder extends RecyclerView.ViewHolder {
     public int getItemCount() {
         return items.size();
     }
-
 
 }

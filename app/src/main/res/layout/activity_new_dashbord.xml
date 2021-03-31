@@ -460,7 +460,7 @@
                         app:backgroundTint="@color/sky_blue"
                         app:fabSize="normal"
                         app:rippleColor="@android:color/white"
-                        app:srcCompat="@drawable/ic_whatsapp"/>
+                        app:srcCompat="@drawable/ic_baseline_share_24"/>
 
                 </LinearLayout>
 

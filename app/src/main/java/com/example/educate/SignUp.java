@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +27,8 @@ public class SignUp extends AppCompatActivity {
     TextInputEditText username,usermobile,password;
     Button submit_button;
 
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +38,28 @@ public class SignUp extends AppCompatActivity {
         username = findViewById(R.id.user_name);
         usermobile = findViewById(R.id.mobile_no);
         password = findViewById(R.id.password);
+        progressBar = findViewById(R.id.spin_kit);
 
         submit_button = findViewById(R.id.submit_button);
 
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkData();
+
+                if(password.getText().toString().length() >= 8) {
+                    if(usermobile.getText().toString().length() == 10) {
+
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        checkData();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Enter proper mobileno", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Password should be at least greater than 8 length", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -62,11 +80,12 @@ public class SignUp extends AppCompatActivity {
             dref = FirebaseDatabase.getInstance().getReference("UserData");
             String user_id = dref.push().getKey();
 
-            UserData ud = new UserData(user_id, username.getText().toString(), usermobile.getText().toString(), password.getText().toString(),"abc@gmail.com","url", "time", "date", "0.0", "true");
+            UserData ud = new UserData(user_id, username.getText().toString(), usermobile.getText().toString(), password.getText().toString(),"abc@gmail.com","url", "time", "date", "0.0", "true","0","0");
             dref.child(user_id).setValue(ud).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(SignUp.this, "User Created", Toast.LENGTH_SHORT).show();
                         finish();
                     }

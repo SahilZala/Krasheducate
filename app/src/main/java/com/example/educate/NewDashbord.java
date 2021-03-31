@@ -87,7 +87,8 @@ public class NewDashbord extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(),NewProfileActivity.class));
+                finish();
             }
         });
 

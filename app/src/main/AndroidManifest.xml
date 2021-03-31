@@ -14,7 +14,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Educate">
-        <activity android:name=".SubjectActivity"></activity>
+        <activity android:name=".NewProfileActivity"></activity>
+        <activity android:name=".WordFileVIewer" />
+        <activity android:name=".IntroScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ForgotPassword" />
+        <activity android:name=".SubjectActivity" />
         <activity android:name=".NewDashbord" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".Profile" />
@@ -26,13 +36,7 @@
         <activity android:name=".Dashbord" />
         <activity android:name=".OtpActivity" />
         <activity android:name=".SignUp" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

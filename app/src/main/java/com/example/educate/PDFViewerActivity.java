@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,6 +65,31 @@ public class PDFViewerActivity extends AppCompatActivity {
 
     }
 
+    void setCountData(String data)
+    {
+
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("TopicCount").child(getOUid());
+
+        TopicCount tc = new TopicCount(getOUid(),data,"nots");
+
+        dref.child(data).setValue(tc);
+    }
+
+    SQLiteDatabase db;
+    String getOUid()
+    {
+        Cursor c = null;
+        String i = "";
+        db = openOrCreateDatabase("UserData", MODE_PRIVATE, null);
+        db.execSQL("create table if not exists userdata (aid text,val text,uid text,uemai text,uname text,umobile text,utype text);");
+        c = db.rawQuery("select * from userdata;", null);
+        c.moveToFirst();
+        for (int ii = 0; c.moveToPosition(ii); ii++) {
+            i = c.getString(0);
+        }
+        return i;
+    }
+
     class RetiveStream extends AsyncTask<String,Void, InputStream>
     {
 
@@ -93,6 +120,7 @@ public class PDFViewerActivity extends AppCompatActivity {
             pdfView.fromStream(inputStream).onLoad(new OnLoadCompleteListener() {
                 @Override
                 public void loadComplete(int nbPages) {
+                    setCountData(topicid);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }).load();

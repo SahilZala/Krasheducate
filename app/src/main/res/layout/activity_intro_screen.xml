@@ -4,11 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OtpActivity"
-    android:background="@color/black_mate">
-
-
-
+    android:background="#fcfcfc"
+    tools:context=".IntroScreen">
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

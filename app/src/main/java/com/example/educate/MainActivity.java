@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    TextView forget;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +54,16 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setIndeterminateDrawable(foldingCube);
 
 
+        forget = findViewById(R.id.forget);
         progressBar.setVisibility(View.INVISIBLE);
 
+
+        forget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ForgotPassword.class));
+            }
+        });
 
 
         if (checkOut().equals("1")){

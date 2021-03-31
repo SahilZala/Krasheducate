@@ -85,8 +85,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="Email"
-                        app:hintTextColor="@color/sky_blue"
-                        app:boxStrokeColor="@color/sky_blue"
+                        app:hintTextColor="@color/black_mate_2"
+                        app:boxStrokeColor="@color/black_mate_2"
 
                         >
 

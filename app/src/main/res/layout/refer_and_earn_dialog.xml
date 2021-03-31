@@ -37,7 +37,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
                             android:id="@+id/textView01"
-                            android:text="Update Username"
+                            android:text="Refer and Earn"
                             android:textColor="@color/black_mate_2"
                             android:fontFamily="@font/roboto_regular"
                             android:textSize="16dp"
@@ -61,11 +61,86 @@
                             android:textColor="@color/black_mate_2"
                             android:fontFamily="@font/roboto_regular"
                             android:textSize="18dp"
-
                             />
 
                     </RelativeLayout>
                 </LinearLayout>
+
+                <View android:layout_height="30dp"
+                    android:layout_width="0dp"/>
+
+
+                <RelativeLayout
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textColor="@color/black_mate_2"
+                        android:fontFamily="@font/roboto_bold"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="0"
+                        android:textSize="30dp"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textColor="@color/ligh_grey"
+                        android:fontFamily="@font/roboto_bold"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="0 people refer"
+                        android:textSize="15dp"
+                        />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    />
+
+                <androidx.cardview.widget.CardView
+                    app:cardElevation="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    app:cardCornerRadius="10dp"
+                    app:strokeColor="@color/grey_60"
+                    app:strokeWidth="3dp">
+
+                    <LinearLayout
+                        android:gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+
+                        <TextView
+                            android:id="@+id/refer_id"
+                            android:gravity="left"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="refer id shown here"
+                            android:textSize="18dp" />
+
+                        <ImageButton
+                            android:layout_marginRight="0dp"
+                            android:layout_marginLeft="10dp"
+                            android:id="@+id/copy_icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_baseline_content_copy_24" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
 
                 <View
                     android:layout_height="30dp"
@@ -79,11 +154,10 @@
                     android:layout_width="match_parent">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        app:startIconDrawable="@drawable/ic_baseline_supervised_user_circle_24"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="user name"
+                        android:hint="Enter Code"
                         app:hintTextColor="@color/black_mate_2"
                         app:boxStrokeColor="@color/black_mate_2"
 
@@ -96,7 +170,7 @@
                             android:inputType="text"
                             android:textSize="15dp"
                             android:fontFamily="@font/roboto_light"
-                            android:id="@+id/user_name_update"
+                            android:id="@+id/enter_refer_id"
                             android:textColor="@color/black_mate"
                             android:textColorHint="@color/dark_grey_mate"
                             />
@@ -104,7 +178,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>
 
-                <View android:layout_height="50dp"
+                <View android:layout_height="20dp"
                     android:layout_width="0dp"/>
 
                 <RelativeLayout android:layout_height="match_parent"
@@ -114,7 +188,7 @@
                     >
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/username_update"
+                        android:id="@+id/submit_refer_id"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
@@ -122,13 +196,15 @@
                         android:fontFamily="@font/roboto_bold"
                         android:paddingTop="5dp"
                         android:text="Continue"
-                        android:textColor="@color/cream_white"
+                        android:textColor="@color/black_mate_2"
                         app:cornerRadius="5dp" />
 
                 </RelativeLayout>
 
 
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>

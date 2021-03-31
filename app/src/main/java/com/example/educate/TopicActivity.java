@@ -7,10 +7,12 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -18,9 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,22 +84,32 @@ public class TopicActivity extends AppCompatActivity {
         topic_recycler_view.scrollToPosition(0);
 //        topic_scrollView.getParent().requestChildFocus(topic_scrollView,topic_scrollView);
 
+        topicAdapter.setOnItemClickListener1(new AdapterTopicList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, TopicClass obj, int position) {
+               descDialog(obj.getDescription());
+            }
+        });
+
         topicAdapter.setOnItemClickListener(new AdapterTopicList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, TopicClass obj, int position) {
                 if(obj.type.equals("link")) {
                   //  progressBar1.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("link",obj.getLink()));
+                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("topicid",obj.getTopicid()).putExtra("link",obj.getLink()));
+                }
+                else if(obj.type.equalsIgnoreCase("pdf")){
+                    startActivity(new Intent(getApplicationContext(), PDFViewerActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("topicid",obj.getTopicid()));
                 }
                 else
                 {
+                    startActivity(new Intent(getApplicationContext(), WordFileVIewer.class).putExtra("topicid",obj.getTopicid()).putExtra("link",obj.getLink()));
                    // progressBar1.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(getApplicationContext(), PDFViewerActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("topicid",obj.getTopicid()));
+
                 }
 
             }
         });
-
     }
 
     DatabaseReference topic_dref;
@@ -154,6 +169,38 @@ public class TopicActivity extends AppCompatActivity {
             window.setStatusBarColor(this.getResources().getColor(R.color.sky_blue));
         }
     }
+
+
+    private void descDialog(String description) {
+
+        ImageButton cancel_dialog;
+
+        TextView desc;
+
+        //    CircularImageView profile;
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.description_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        cancel_dialog = dialog.findViewById(R.id.cancel_dialog);
+
+        desc = dialog.findViewById(R.id.desc_dialog);
+
+        desc.setText(description);
+        cancel_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+
+        dialog.show();
+    }
+
 
 
 }

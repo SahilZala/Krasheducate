@@ -38,6 +38,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
     String data = "";
     TimerCounter vp,st;
     String userid = "";
+    String topicid = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,8 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
         st.start();
         Log.d(TAG,"onCreate! Starting:");
         data = getIntent().getStringExtra("link");
+
+        topicid = getIntent().getStringExtra("topicid");
 
         userid = getOUid();
 
@@ -193,10 +196,24 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
         putDataInFirebase(v);
 
+
        Toast.makeText(this, "Point score = "+String.valueOf(v), Toast.LENGTH_SHORT).show();
+
+       setCountData(topicid);
 
        finish();
 
+    }
+
+
+    void setCountData(String data)
+    {
+
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("TopicCount").child(getOUid());
+
+        TopicCount tc = new TopicCount(getOUid(),data,"video");
+
+        dref.child(data).setValue(tc);
     }
 
 
@@ -213,10 +230,20 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
                 UserData ud = snapshot.getValue(UserData.class);
                 String point = ud.getPoints();
 
-                val = Double.parseDouble(point);
+                if(!point.equalsIgnoreCase("Infinity")) {
 
-                if(da > 0) {
-                    dref.child("points").setValue(String.valueOf(val + da));
+                    val = Double.parseDouble(point);
+
+                    if (da > 0) {
+                        dref.child("points").setValue(String.valueOf(val + da));
+                    }
+                }
+                else{
+                    val = 0.0;
+
+                    if (da > 0) {
+                        dref.child("points").setValue(String.valueOf(val + da));
+                    }
                 }
             }
 

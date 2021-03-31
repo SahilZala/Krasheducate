@@ -29,7 +29,7 @@
                 android:fontFamily="@font/roboto_bold"
                 android:textSize="30dp"
                 android:text="Keep Connected"
-                android:textColor="@color/smooth_ligh_blue"
+                android:textColor="@color/black_mate_2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content" />
             </RelativeLayout>
@@ -72,10 +72,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="mobileno"
-                        app:hintTextColor="@color/smooth_ligh_blue"
+                        app:hintTextColor="@color/black_mate_2"
                         app:endIconMode="custom"
                         app:endIconTint="#008000"
-                        app:boxStrokeColor="@color/dark_blue"
+                        app:boxStrokeColor="@color/black_mate_2"
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -112,9 +112,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="password"
-                    app:hintTextColor="@color/smooth_ligh_blue"
+                    app:hintTextColor="@color/black_mate_2"
                     app:passwordToggleEnabled="true"
-                    app:boxStrokeColor="@color/dark_blue"
+                    app:boxStrokeColor="@color/black_mate_2"
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -137,6 +137,7 @@
             <View android:layout_height="20dp"
                 android:layout_width="0dp" />
             <TextView
+                android:id="@+id/forget"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="Forget Password?"
@@ -151,7 +152,7 @@
 
 
             <com.google.android.material.button.MaterialButton
-                android:backgroundTint="@color/smooth_blue"
+                android:backgroundTint="@color/sky_blue"
                 android:id="@+id/log_in"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -193,7 +194,7 @@
                 android:layout_height="60dp"
                 android:text="Create Account"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/smooth_blue"
+                android:textColor="@color/sky_blue"
                 android:fontFamily="@font/roboto_bold"
                 android:padding="10dp"
                 app:cornerRadius="5dp"
