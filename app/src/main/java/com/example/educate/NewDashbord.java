@@ -336,6 +336,7 @@ public class NewDashbord extends AppCompatActivity {
                 db.execSQL("drop table userdata;");
 
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                dialog.cancel();
                 finish();
             }
         });

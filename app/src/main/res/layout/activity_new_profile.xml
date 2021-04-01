@@ -138,11 +138,14 @@
                                 android:orientation="horizontal">
 
                                 <androidx.cardview.widget.CardView
-                                    app:cardElevation="0dp"
+                                    app:cardElevation="2dp"
                                     android:layout_margin="5dp"
                                     android:layout_weight="1"
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    card_view:cardCornerRadius="2dp"
+
                                     >
 
                                     <LinearLayout
@@ -179,11 +182,14 @@
                                 </androidx.cardview.widget.CardView>
 
                                 <androidx.cardview.widget.CardView
-                                   app:cardElevation="0dp"
+                                   app:cardElevation="2dp"
                                     android:layout_margin="5dp"
                                     android:layout_weight="1"
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    card_view:cardCornerRadius="2dp"
+
                                     >
                                     <LinearLayout
                                         android:gravity="center"
@@ -223,7 +229,10 @@
                                     android:layout_weight="1"
                                     android:layout_width="match_parent"
                                     android:layout_height="100dp"
-                                    app:cardElevation="0dp"
+                                    app:cardElevation="2dp"
+                                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                                    card_view:cardCornerRadius="2dp"
+
                                     >
 
                                     <LinearLayout

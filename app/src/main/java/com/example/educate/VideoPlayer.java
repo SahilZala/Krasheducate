@@ -85,12 +85,13 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
                     public void onStopped() {
 
                         //vp.stopThread();
-                        //Toast.makeText(VideoPlayer.this, "onStoped()", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(VideoPlayer.this, "onStoped()", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onBuffering(boolean b) {
-                       // Toast.makeText(VideoPlayer.this, "onBuffering()", Toast.LENGTH_SHORT).show();
+                        vp.pauseNode();
+                        //Toast.makeText(VideoPlayer.this, "onBuffering()", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -126,7 +127,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
                     @Override
                     public void onVideoEnded() {
                         vp.pauseNode();
-                        Toast.makeText(VideoPlayer.this, "video ended", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(VideoPlayer.this, "video ended", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -188,21 +189,24 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
      //   Toast.makeText(this, "Screen time = "+String.valueOf(st.sec), Toast.LENGTH_SHORT).show();
 
-        double v = (Double.parseDouble(String.valueOf(st.sec)) - (1-(Double.parseDouble(String.valueOf(vp.sec))/(Double.parseDouble(String.valueOf(ytp.getCurrentTimeMillis()/1000))))))/100;
-
-
         st.stopThread();
         vp.stopThread();
 
-        putDataInFirebase(v);
+        double v = (Double.parseDouble(String.valueOf(st.sec)) - (1-(Double.parseDouble(String.valueOf(vp.sec))/(Double.parseDouble(String.valueOf(ytp.getCurrentTimeMillis()/1000))))))/100;
 
 
-       Toast.makeText(this, "Point score = "+String.valueOf(v), Toast.LENGTH_SHORT).show();
 
-       setCountData(topicid);
 
-       finish();
 
+
+//       Toast.makeText(this, "Point score = "+String.valueOf(v), Toast.LENGTH_SHORT).show();
+
+       if(st.exit == false)
+       {
+           setCountData(topicid);
+           putDataInFirebase(v);
+           finish();
+       }
     }
 
 
@@ -230,7 +234,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
                 UserData ud = snapshot.getValue(UserData.class);
                 String point = ud.getPoints();
 
-                if(!point.equalsIgnoreCase("Infinity")) {
+                if(!point.equalsIgnoreCase("Infinity") && da < 1000000) {
 
                     val = Double.parseDouble(point);
 
@@ -238,13 +242,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
                         dref.child("points").setValue(String.valueOf(val + da));
                     }
                 }
-                else{
-                    val = 0.0;
 
-                    if (da > 0) {
-                        dref.child("points").setValue(String.valueOf(val + da));
-                    }
-                }
             }
 
             @Override

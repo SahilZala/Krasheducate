@@ -12,16 +12,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +39,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.WriterException;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 
 public class NewProfileActivity extends AppCompatActivity {
 
@@ -40,6 +50,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
     TextView username,useremail,points;
     TextView video,nots;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +65,9 @@ public class NewProfileActivity extends AppCompatActivity {
 
         video = findViewById(R.id.video_c);
         nots = findViewById(R.id.nots_c);
+
+
+
 
         refer_earn_card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,13 +134,17 @@ public class NewProfileActivity extends AppCompatActivity {
     }
 
 
+    Bitmap bitmap;
+    QRGEncoder qrgEncoder;
     private void refer_earn(String referid) {
 
         ImageButton cancel_dialog,copy_button;
 
-        TextView refer_id;
+        TextView refer_id,scan_code;
         TextInputEditText refer_edit_text;
         MaterialButton refer_submit_button;
+        ImageView refer_qr;
+
 
 
         //    CircularImageView profile;
@@ -142,8 +160,62 @@ public class NewProfileActivity extends AppCompatActivity {
         refer_id = dialog.findViewById(R.id.refer_id);
         copy_button = dialog.findViewById(R.id.copy_icon);
         refer_submit_button = dialog.findViewById(R.id.submit_refer_id);
+        refer_qr = dialog.findViewById(R.id.refer_qr);
+        scan_code = dialog.findViewById(R.id.scan_qr_code);
+
+
+        WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        // initializing a variable for default display.
+        Display display = manager.getDefaultDisplay();
+
+        // creating a variable for point which
+        // is to be displayed in QR Code.
+        Point point = new Point();
+        display.getSize(point);
+
+        // getting width and
+        // height of a point
+        int width = point.x;
+        int height = point.y;
+
+        // generating dimension from width and height.
+        int dimen = width < height ? width : height;
+        dimen = dimen * 3 / 4;
+
+        // setting this dimensions inside our qr code
+        // encoder to generate our qr code.
+        qrgEncoder = new QRGEncoder(referid, null, QRGContents.Type.TEXT, dimen);
+        try {
+            // getting our qrcode in the form of bitmap.
+            bitmap = qrgEncoder.encodeAsBitmap();
+            // the bitmap is set inside our image
+            // view using .setimagebitmap method.
+            refer_qr.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            // this method is called for
+            // exception handling.
+            Log.e("Tag", e.toString());
+        }
+
+
+
 
         refer_id.setText(referid);
+
+
+
+
+
+        scan_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ScanneQRCode.class));
+                finish();
+            }
+        });
+
+
 
         copy_button.setOnClickListener(new View.OnClickListener() {
             @Override
