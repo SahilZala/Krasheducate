@@ -158,16 +158,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                if(userData != null)
+                if(userData != null )
                 {
 
-                    progressBar.setVisibility(View.INVISIBLE);
+                    if(userData.getActivation().equalsIgnoreCase("true")) {
+                        progressBar.setVisibility(View.INVISIBLE);
 
-                    insertData(userData.getUserid(), "1",userData.getUserid(),userData.getMobileno(), userData.getUsername(), userData.getMobileno(), "student");
-                    startActivity(new Intent(getApplicationContext(),NewDashbord.class).putExtra("username",userData.getUsername()).putExtra("userid",userData.userid));
-                    finish();
+                        insertData(userData.getUserid(), "1", userData.getUserid(), userData.getMobileno(), userData.getUsername(), userData.getMobileno(), "student");
+                        startActivity(new Intent(getApplicationContext(), NewDashbord.class).putExtra("username", userData.getUsername()).putExtra("userid", userData.userid));
+                        finish();
+                    }
+                    else{
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(MainActivity.this, "Your Block by admin", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else
+                else if(userData == null)
                 {
 
                     progressBar.setVisibility(View.INVISIBLE);

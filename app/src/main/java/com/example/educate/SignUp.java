@@ -80,7 +80,7 @@ public class SignUp extends AppCompatActivity {
             dref = FirebaseDatabase.getInstance().getReference("UserData");
             String user_id = dref.push().getKey();
 
-            UserData ud = new UserData(user_id, username.getText().toString(), usermobile.getText().toString(), password.getText().toString(),"abc@gmail.com","url", "time", "date", "0.0", "true","0","0");
+            UserData ud = new UserData(user_id, username.getText().toString(), usermobile.getText().toString(), password.getText().toString(),"abc@gmail.com","url", "time", "date", "0.0", "true","unpaid","0","0");
             dref.child(user_id).setValue(ud).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {

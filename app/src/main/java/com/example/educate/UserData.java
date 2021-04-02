@@ -1,12 +1,12 @@
 package com.example.educate;
 
 public class UserData {
-    String userid,username,mobileno,password,mail,profile,time,date,points,activation,referdone,referby;
+    String userid,username,mobileno,password,mail,profile,time,date,points,activation,paidunpaid,referdone,referby;
 
     public UserData() {
     }
 
-    public UserData(String userid, String username, String mobileno, String password, String mail, String profile, String time, String date, String points, String activation, String referdone, String referby) {
+    public UserData(String userid, String username, String mobileno, String password, String mail, String profile, String time, String date, String points, String activation, String paidunpaid, String referdone, String referby) {
         this.userid = userid;
         this.username = username;
         this.mobileno = mobileno;
@@ -17,8 +17,17 @@ public class UserData {
         this.date = date;
         this.points = points;
         this.activation = activation;
+        this.paidunpaid = paidunpaid;
         this.referdone = referdone;
         this.referby = referby;
+    }
+
+    public String getPaidunpaid() {
+        return paidunpaid;
+    }
+
+    public void setPaidunpaid(String paidunpaid) {
+        this.paidunpaid = paidunpaid;
     }
 
     public String getReferby() {

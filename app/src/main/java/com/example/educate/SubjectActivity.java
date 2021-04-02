@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,15 +42,18 @@ public class SubjectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject);
+
+        fetchData();
+
         initToolbar();
         getNotificationColor();
 
 
-        fetchDataFromFirebase();
 
         progressBar1 = findViewById(R.id.spin_kit);
 
         subject_recycler_view = findViewById(R.id.subject_recycler_view);
+
 
 
     }
@@ -126,8 +131,18 @@ public class SubjectActivity extends AppCompatActivity {
                 for(DataSnapshot ds:snapshot.getChildren()){
                     SubjectClass sc = ds.getValue(SubjectClass.class);
 
-                    data.add(sc);
+                    if(sc.getActivation().equalsIgnoreCase("true")) {
+                        if (userData != null) {
+                            if (userData.getPaidunpaid().equalsIgnoreCase("paid")) {
+                                data.add(sc);
+                            } else if (userData.getPaidunpaid().equalsIgnoreCase("unpaid")) {
+                                if (sc.getFtype().equalsIgnoreCase("free")) {
+                                    data.add(sc);
+                                }
+                            }
 
+                        }
+                    }
                 }
 
 
@@ -141,6 +156,44 @@ public class SubjectActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    UserData userData = null;
+    DatabaseReference name_ref;
+    void fetchData()
+    {
+        name_ref = FirebaseDatabase.getInstance().getReference("UserData").child(getOUid());
+
+        name_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserData ud = snapshot.getValue(UserData.class);
+
+                userData = ud;
+                fetchDataFromFirebase();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    SQLiteDatabase db;
+    String getOUid()
+    {
+        Cursor c = null;
+        String i = "";
+        db = openOrCreateDatabase("UserData", MODE_PRIVATE, null);
+        db.execSQL("create table if not exists userdata (aid text,val text,uid text,uemai text,uname text,umobile text,utype text);");
+        c = db.rawQuery("select * from userdata;", null);
+        c.moveToFirst();
+        for (int ii = 0; c.moveToPosition(ii); ii++) {
+            i = c.getString(0);
+        }
+        return i;
     }
 
 }

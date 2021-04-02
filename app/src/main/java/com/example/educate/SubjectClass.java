@@ -1,12 +1,12 @@
 package com.example.educate;
 
 public class SubjectClass {
-    String subjectid,name,description,type,time,date,createdby,activation;
+    String subjectid,name,description,type,time,date,createdby,ftype,activation;
 
     public SubjectClass() {
     }
 
-    public SubjectClass(String subjectid, String name, String description, String type, String time, String date, String createdby, String activation) {
+    public SubjectClass(String subjectid, String name, String description, String type, String time, String date, String createdby, String ftype, String activation) {
         this.subjectid = subjectid;
         this.name = name;
         this.description = description;
@@ -14,7 +14,16 @@ public class SubjectClass {
         this.time = time;
         this.date = date;
         this.createdby = createdby;
+        this.ftype = ftype;
         this.activation = activation;
+    }
+
+    public String getFtype() {
+        return ftype;
+    }
+
+    public void setFtype(String ftype) {
+        this.ftype = ftype;
     }
 
     public String getSubjectid() {
