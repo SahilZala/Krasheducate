@@ -99,13 +99,22 @@ public class TopicActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("topicid",obj.getTopicid()).putExtra("link",obj.getLink()));
                 }
                 else if(obj.type.equalsIgnoreCase("pdf")){
-                    startActivity(new Intent(getApplicationContext(), PDFViewerActivity.class).putExtra("subjectid",obj.getSubjectid()).putExtra("topicid",obj.getTopicid()));
+                    if(!obj.link.equalsIgnoreCase("wait uploading is in progress") && !obj.link.equalsIgnoreCase("none")) {
+                        startActivity(new Intent(getApplicationContext(), PDFViewerActivity.class).putExtra("subjectid", obj.getSubjectid()).putExtra("topicid", obj.getTopicid()));
+                    }
+                    else{
+                        Toast.makeText(TopicActivity.this, "Not loaded file", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else
                 {
-                    startActivity(new Intent(getApplicationContext(), WordFileVIewer.class).putExtra("topicid",obj.getTopicid()).putExtra("link",obj.getLink()));
-                   // progressBar1.setVisibility(View.INVISIBLE);
-
+                    if(!obj.link.equalsIgnoreCase("wait uploading is in progress") && !obj.link.equalsIgnoreCase("none")) {
+                        startActivity(new Intent(getApplicationContext(), WordFileVIewer.class).putExtra("topicid", obj.getTopicid()).putExtra("link", obj.getLink()));
+                        // progressBar1.setVisibility(View.INVISIBLE);
+                    }
+                    else{
+                        Toast.makeText(TopicActivity.this, "Not loaded file", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

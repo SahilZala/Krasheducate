@@ -8,10 +8,12 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -19,7 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,9 +36,11 @@ import java.util.ArrayList;
 
 public class SubjectActivity extends AppCompatActivity {
 
-    RecyclerView subject_recycler_view;
+    RecyclerView subject_recycler_view,secondary_subject_recycler_view;
+
     //Button notes,video;
 
+    TextView paid;
 
 
     ProgressBar progressBar1;
@@ -49,11 +56,13 @@ public class SubjectActivity extends AppCompatActivity {
         getNotificationColor();
 
 
+        paid = findViewById(R.id.paid_view);
 
         progressBar1 = findViewById(R.id.spin_kit);
 
         subject_recycler_view = findViewById(R.id.subject_recycler_view);
 
+        secondary_subject_recycler_view = findViewById(R.id.secondary_subject_recycler_view);
 
 
     }
@@ -92,11 +101,33 @@ public class SubjectActivity extends AppCompatActivity {
         }
     }
 
+    void secondAdapter(ArrayList<SubjectClass> data)
+    {
+        secondary_subject_recycler_view.setLayoutManager(new LinearLayoutManager(this));
+        secondary_subject_recycler_view.setHasFixedSize(true);
 
-    void adaptData()
+        //set data and list adapter
+        AdapterSubjectList subjectAdapter = new AdapterSubjectList(this,data);
+        secondary_subject_recycler_view.setAdapter(subjectAdapter);
+
+        secondary_subject_recycler_view.scrollToPosition(0);
+        //scrollView.getParent().requestChildFocus(scrollView,scrollView);
+
+
+        subjectAdapter.setOnItemClickListener(new AdapterSubjectList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, SubjectClass obj, int position) {
+                subscribe_show();
+                //Toast.makeText(SubjectActivity.this, "subscribe", Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(getApplicationContext(),TopicActivity.class).putExtra("subjectid",obj.getSubjectid()));
+            }
+        });
+    }
+
+    void adaptData(ArrayList<SubjectClass> data)
     {
         subject_recycler_view.setLayoutManager(new LinearLayoutManager(this));
-        subject_recycler_view.setHasFixedSize(true);
+        subject_recycler_view.setHasFixedSize(false);
 
         //set data and list adapter
         AdapterSubjectList subjectAdapter = new AdapterSubjectList(this,data);
@@ -117,9 +148,11 @@ public class SubjectActivity extends AppCompatActivity {
 
     DatabaseReference dref;
     ArrayList<SubjectClass> data;
+    ArrayList<SubjectClass> paid_data;
     void fetchDataFromFirebase()
     {
         data = new ArrayList<>();
+        paid_data = new ArrayList<>();
 
 
         dref = FirebaseDatabase.getInstance().getReference("Subject");
@@ -127,6 +160,7 @@ public class SubjectActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 data.clear();
+                paid_data.clear();
 
                 for(DataSnapshot ds:snapshot.getChildren()){
                     SubjectClass sc = ds.getValue(SubjectClass.class);
@@ -139,6 +173,9 @@ public class SubjectActivity extends AppCompatActivity {
                                 if (sc.getFtype().equalsIgnoreCase("free")) {
                                     data.add(sc);
                                 }
+                                else{
+                                    paid_data.add(sc);
+                                }
                             }
 
                         }
@@ -147,8 +184,16 @@ public class SubjectActivity extends AppCompatActivity {
 
 
                 progressBar1.setVisibility(View.INVISIBLE);
-                adaptData();
-
+                if(userData.getPaidunpaid().equalsIgnoreCase("paid")) {
+                    paid.setText("");
+                    adaptData(data);
+                    secondAdapter(paid_data);
+                }
+                else{
+                    paid.setText("Paid");
+                    adaptData(data);
+                    secondAdapter(paid_data);
+                }
             }
 
             @Override
@@ -194,6 +239,32 @@ public class SubjectActivity extends AppCompatActivity {
             i = c.getString(0);
         }
         return i;
+    }
+
+
+    private void subscribe_show() {
+
+        ImageButton cancel_dialog;
+
+        //    CircularImageView profile;
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.subscribe_alert_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        cancel_dialog = dialog.findViewById(R.id.cancel_dialog);
+
+        cancel_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+
+        dialog.show();
     }
 
 }

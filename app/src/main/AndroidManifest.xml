@@ -15,7 +15,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Educate">
-        <activity android:name=".ScanneQRCode"></activity>
+        <activity android:name=".PointsActivity"
+            android:screenOrientation="portrait"
+
+            />
+        <activity android:name=".ScanneQRCode" />
         <activity android:name=".NewProfileActivity" />
         <activity android:name=".WordFileVIewer" />
         <activity android:name=".IntroScreen">

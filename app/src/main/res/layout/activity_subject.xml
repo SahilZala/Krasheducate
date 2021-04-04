@@ -37,6 +37,30 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
+                <View
+                    android:layout_height="10dp"
+                    android:layout_width="0dp" />
+
+                <TextView
+                    android:id="@+id/paid_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Paid"
+
+                    android:textColor="@color/black_mate_2"
+                    android:textSize="20dp" />
+
+                <View
+                    android:layout_height="10dp"
+                    android:layout_width="0dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/secondary_subject_recycler_view"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <View
                     android:layout_height="40dp"

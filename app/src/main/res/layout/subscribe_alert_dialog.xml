@@ -37,7 +37,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
                             android:id="@+id/textView01"
-                            android:text="Description"
+                            android:text="Subscription"
                             android:textColor="@color/black_mate_2"
                             android:fontFamily="@font/roboto_regular"
                             android:textSize="16dp"
@@ -76,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
-                    android:text="description"
+                    android:text="you has to subscribe to app from admin,please call to admin"
                     android:textColor="@color/black_mate_2"
                     android:textSize="18dp" />
 

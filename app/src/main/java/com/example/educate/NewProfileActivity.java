@@ -1,15 +1,23 @@
 package com.example.educate;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -17,8 +25,10 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
@@ -28,10 +38,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.style.FoldingCube;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
@@ -39,17 +54,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.WriterException;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class NewProfileActivity extends AppCompatActivity {
 
-    CardView refer_earn_card,logout_card;
+    CardView refer_earn_card,logout_card,comment_feedback;
 
     TextView username,useremail,points;
     TextView video,nots;
+    CircularImageView profile_image;
+
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +89,27 @@ public class NewProfileActivity extends AppCompatActivity {
         useremail = findViewById(R.id.new_profile_user_email);
         points = findViewById(R.id.new_profile_user_points);
 
+        comment_feedback = findViewById(R.id.comment_feedback);
+        profile_image = findViewById(R.id.profile_image);
+
         video = findViewById(R.id.video_c);
         nots = findViewById(R.id.nots_c);
 
+        progressBar = (ProgressBar)findViewById(R.id.spin_kit);
+        FoldingCube foldingCube = new FoldingCube();
+        progressBar.setIndeterminateDrawable(foldingCube);
+
+        progressBar.setVisibility(View.INVISIBLE);
 
 
+
+        comment_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                comment();
+
+            }
+        });
 
         refer_earn_card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +138,13 @@ public class NewProfileActivity extends AppCompatActivity {
         initToolbar();
         getCurrentUserData();
         fetcWatchData();
+
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
     }
 
     @Override
@@ -456,6 +505,10 @@ public class NewProfileActivity extends AppCompatActivity {
                     useremail.setText(ud.getMail());
                     long p = (long)Double.parseDouble(ud.points);
                     points.setText(String.valueOf(p));
+
+                    if(!ud.getProfile().equalsIgnoreCase("url")){
+                        Picasso.get().load(ud.getProfile()).into(profile_image);
+                    }
                 }
                 else{
                     Toast.makeText(NewProfileActivity.this, "Data Not Found.", Toast.LENGTH_SHORT).show();
@@ -591,6 +644,239 @@ public class NewProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private void comment() {
+
+        ImageButton cancel_dialog;
+        MaterialButton update;
+        TextInputEditText comment;
+
+
+        //    CircularImageView profile;
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.comment_review);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        cancel_dialog = dialog.findViewById(R.id.cancel_dialog);
+        update = dialog.findViewById(R.id.submit);
+
+        comment = dialog.findViewById(R.id.comment);
+
+        cancel_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Comment c = new Comment(getOUid(),comment.getText().toString(),"time","date","true");
+
+                DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Comment").child(getOUid());
+                dref.setValue(c);
+
+                dialog.cancel();
+                Toast.makeText(NewProfileActivity.this, "comment posted", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        dialog.show();
+    }
+
+    Uri filepath=null;
+    StorageReference sr;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 111;
+    Integer REQUEST_CAMERA=1,SELECT_FILE=0;
+
+
+    void selectImage()
+    {
+      /*  Intent i = new Intent();
+        i.setType("Image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(i,"Select an Image"),ChooseImage);
+    */
+
+        final CharSequence[] items={"Camera","Gallery","Cancel"};
+
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setTitle("Add Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(items[which].equals("Camera"))
+                {
+                    if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)== PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, REQUEST_CAMERA);
+                    }
+                    else{
+                        ActivityCompat.requestPermissions(NewProfileActivity.this,new String[]{Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CAMERA);
+
+                    }
+                }else if(items[which].equals("Gallery")){
+                    Intent intent=new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(intent.createChooser(intent,"Select File"),SELECT_FILE);
+
+                }else if(items[which].equals("Cancel"))
+                {
+                    dialog.dismiss();
+                }
+            }
+        }).create().show();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        int hasWriteStoragePermission = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (hasWriteStoragePermission != PackageManager.PERMISSION_GRANTED) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CONTACTS)) {
+                    showMessageOKCancel("You need to allow access to Storage",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE},
+                                                REQUEST_CODE_ASK_PERMISSIONS);
+                                    }
+                                }
+                            });
+                    return;
+                }
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_CODE_ASK_PERMISSIONS);
+            }
+            return;
+        }else {
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == REQUEST_CAMERA) {
+                    filepath = data.getData();
+                    Bundle bundle = data.getExtras();
+                    final Bitmap bitmap = (Bitmap) bundle.get("data");
+                    profile_image.setImageBitmap(bitmap);
+
+                    filepath = (Uri) getImageUri(NewProfileActivity.this, bitmap);
+
+                    uploadImage();
+                } else if (requestCode == SELECT_FILE) {
+                    filepath = data.getData();
+                    profile_image.setImageURI(filepath);
+                    uploadImage();
+                   // Toast.makeText(this, ""+filepath, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private Uri getImageUri(NewProfileActivity applicationContext, Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        String path= MediaStore.Images.Media.insertImage(applicationContext.getContentResolver(),bitmap,"Title",null);
+        return Uri.parse(path);
+
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getApplicationContext())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private void uploadImage()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+        if(filepath != null) {
+            //S111111111111111torageReference riversRef = sr.child("images/"+filepath.getLastPathSegment());
+            // Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+
+            sr = FirebaseStorage.getInstance().getReference();
+
+            StorageReference riversRef = sr.child("images/" + filepath.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(filepath);
+
+
+// Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Toast.makeText(NewProfileActivity.this, "some thing wrong", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                    //Uri u = taskSnapshot.getUploadSessionUri();
+                    //String s = u.toString();
+                    //pname.setText(s);
+
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+
+
+                    // ...
+                    final String[] s = {""};
+                    sr.child("images/" + filepath.getLastPathSegment()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+
+                            s[0] = task.getResult().toString();
+
+                            DatabaseReference dref = FirebaseDatabase.getInstance().getReference("UserData").child(getOUid()).child("profile");
+                            dref.setValue(s[0]);
+
+                          //  sendDataToFirebase(s[0]);
+
+                            //prsnap = s[0];
+                            //pname.setText(s[0]);
+
+                            //ProductClass pc = new ProductClass(prname,prid,prdiscription,prtype,prrice,prquantity,prdate,prtime,prdiscount,prsnap,practivation);
+                            //dref.child(prid).setValue(pc);
+
+                        }
+                    });
+
+                    StorageMetadata downloadUri = taskSnapshot.getMetadata();
+
+
+                }
+            });
+        }
+        else if(filepath == null)
+        {
+
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(this, "select file first", Toast.LENGTH_SHORT).show();
+//            if(activity.equalsIgnoreCase("edit"))
+//            {
+//               // sendDataToFirebase(teacherClassval.getTeachersnap());
+//            }
+//            else
+//            {
+//               // sendDataToFirebase("snap");
+//            }
+        }
     }
 
 }

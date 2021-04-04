@@ -15,7 +15,7 @@
         >
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_weight="1"
 
@@ -29,6 +29,10 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:textColor="@color/grey_1000"/>
 
+            <View
+                android:layout_width="5dp"
+                android:layout_height="0dp"
+                />
             <TextView
                 android:id="@+id/new_username"
                 android:layout_width="wrap_content"
@@ -275,6 +279,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_margin="@dimen/spacing_medium"
 
