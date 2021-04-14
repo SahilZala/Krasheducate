@@ -105,7 +105,7 @@ public class PointsActivity extends AppCompatActivity {
                 userData = ud;
 
                 int p = (int)Double.parseDouble(ud.points);
-                progressBar.setProgress(p);
+                        progressBar.setProgress(p);
                 score.setText(String.valueOf(p)+"%");
 
 

@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +40,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -64,7 +69,32 @@ public class NewDashbord extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_dashbord);
 
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
 
+//
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.w("tag", "Fetching FCM registration token failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        String token = task.getResult();
+//
+//                        Log.i(token,token);
+//
+//                        Toast.makeText(NewDashbord.this, ""+token, Toast.LENGTH_SHORT).show();
+//                        // Log and toast
+//
+//
+//                        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Token");
+//                        dref.child(getOUid()).child("token").setValue(token);
+//
+//                    }
+//                });
 
         initComponent();
 
@@ -103,6 +133,9 @@ public class NewDashbord extends AppCompatActivity {
         points.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                FcmNotificationsSender fns = new FcmNotificationsSender("/topics/all","title","sahil hii",getApplicationContext(),NewDashbord.this);
+//
+//                fns.SendNotifications();
                 startActivity(new Intent(getApplicationContext(),PointsActivity.class));
             }
         });
