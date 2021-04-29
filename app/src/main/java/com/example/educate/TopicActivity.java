@@ -96,7 +96,7 @@ public class TopicActivity extends AppCompatActivity {
             public void onItemClick(View view, TopicClass obj, int position) {
                 if(obj.type.equals("link")) {
                   //  progressBar1.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("topicid",obj.getTopicid()).putExtra("link",obj.getLink()));
+                    startActivity(new Intent(getApplicationContext(), VideoPlayer.class).putExtra("topicname",obj.getName()).putExtra("topicid",obj.getTopicid()).putExtra("link",obj.getLink()));
                 }
                 else if(obj.type.equalsIgnoreCase("pdf")){
                     if(!obj.link.equalsIgnoreCase("wait uploading is in progress") && !obj.link.equalsIgnoreCase("none")) {
@@ -109,7 +109,7 @@ public class TopicActivity extends AppCompatActivity {
                 else
                 {
                     if(!obj.link.equalsIgnoreCase("wait uploading is in progress") && !obj.link.equalsIgnoreCase("none")) {
-                        startActivity(new Intent(getApplicationContext(), WordFileVIewer.class).putExtra("topicid", obj.getTopicid()).putExtra("link", obj.getLink()));
+                        startActivity(new Intent(getApplicationContext(), WordFileVIewer.class).putExtra("topicname",obj.getName()).putExtra("topicid", obj.getTopicid()).putExtra("link", obj.getLink()));
                         // progressBar1.setVisibility(View.INVISIBLE);
                     }
                     else{

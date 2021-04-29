@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 if(userData != null )
                 {
 
-                    if(userData.getActivation().equalsIgnoreCase("true")) {
+                    if(userData.getActivation().equalsIgnoreCase("active") || userData.getActivation().equalsIgnoreCase("true") || userData.getActivation().equalsIgnoreCase("notnotice")) {
                         progressBar.setVisibility(View.INVISIBLE);
 
                         insertData(userData.getUserid(), "1", userData.getUserid(), userData.getMobileno(), userData.getUsername(), userData.getMobileno(), "student");

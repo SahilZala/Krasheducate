@@ -143,6 +143,9 @@ public class PDFViewerActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
                 new RetiveStream().execute(tc.getLink());
+
+                getAddress(tc);
+                //createHistory("Topic",topicid,"Reading pdf "+tc.getName(),);
                 //        progressBar.setVisibility(View.INVISIBLE);
             }
 
@@ -163,5 +166,34 @@ public class PDFViewerActivity extends AppCompatActivity {
         }
     }
 
+    void createHistory(String changes_in,String changes_in_id,String message,String address)
+    {
+        DatabaseReference hist = FirebaseDatabase.getInstance().getReference("History");
+        String histid = hist.push().getKey();
+
+        History h = new History(histid,getOUid(),changes_in,changes_in_id,message,SystemTool.getCurrent_time(),SystemTool.getCurrent_date(),"true",address);
+
+
+        hist.child(getOUid()).child(histid).setValue(h);
+    }
+
+    void getAddress(TopicClass tc)
+    {
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid()).child("address");
+        dref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                AddressClass ac = snapshot.getValue(AddressClass.class);
+
+                createHistory("Topic",topicid,"Reading pdf "+tc.getName(),ac.getAddress());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
 }

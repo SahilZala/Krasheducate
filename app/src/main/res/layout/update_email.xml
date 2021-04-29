@@ -87,6 +87,7 @@
                         android:hint="Email"
                         app:hintTextColor="@color/black_mate_2"
                         app:boxStrokeColor="@color/black_mate_2"
+                        android:id="@+id/email_text_input_layout"
 
                         >
 

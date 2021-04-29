@@ -2,16 +2,25 @@ package com.example.educate;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,25 +53,32 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class NewDashbord extends AppCompatActivity {
+public class NewDashbord extends AppCompatActivity implements LocationListener {
 
     private ViewPager viewPager;
     private LinearLayout layout_dots;
     private AdapterImageSlider adapterImageSlider;
     private Runnable runnable = null;
     private Handler handler = new Handler();
-    FloatingActionButton whatsapp,fb,youtube,insta;
+    FloatingActionButton whatsapp, fb, youtube, insta;
     SQLiteDatabase db;
 
-    DatabaseReference noticeref,noticelinkref;
+    DatabaseReference noticeref, noticelinkref;
 
     TextView new_name;
+    private static final int CAMERA_PERMISSION_CODE = 100;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+    private static final int ACCESS_COARSE_LOCATION = 102;
+    private static final int REQUEST_LOCATION = 123;
 
-    LinearLayout learning,setting,points,logout;
+    LinearLayout learning, setting, points,noti, logout;
 
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,30 +114,66 @@ public class NewDashbord extends AppCompatActivity {
 
         initComponent();
 
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+
+                            Manifest.permission.CAMERA,
+
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_LOCATION);
+
+        } else {
+
+            System.out.println("Location permissions available, starting location");
+
+        }
+
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        onLocationChanged(location);
+
         getNotificationColor();
 
         new_name = findViewById(R.id.new_username);
         learning = findViewById(R.id.learning);
         setting = findViewById(R.id.setting);
         points = findViewById(R.id.points);
+        noti = findViewById(R.id.notice);
         logout = findViewById(R.id.logout);
 
         fetchData();
         learning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),SubjectActivity.class));
+                startActivity(new Intent(getApplicationContext(), SubjectActivity.class));
             }
         });
 
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),NewProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), NewProfileActivity.class));
                 finish();
             }
         });
 
+        noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Notification.class));
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +188,7 @@ public class NewDashbord extends AppCompatActivity {
 //                FcmNotificationsSender fns = new FcmNotificationsSender("/topics/all","title","sahil hii",getApplicationContext(),NewDashbord.this);
 //
 //                fns.SendNotifications();
-                startActivity(new Intent(getApplicationContext(),PointsActivity.class));
+                startActivity(new Intent(getApplicationContext(), PointsActivity.class));
             }
         });
 
@@ -144,7 +196,15 @@ public class NewDashbord extends AppCompatActivity {
 
 
 
+
     private void initComponent() {
+
+
+
+
+
+
+
 
         layout_dots = (LinearLayout) findViewById(R.id.layout_dots);
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -239,8 +299,43 @@ public class NewDashbord extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        double lat = location.getLatitude();
+        double log = location.getLongitude();
 
 
+        Geocoder geocoder;
+        geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+            AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0),addresses.get(0).getAddressLine(0));
+            DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
+            dref.child("address").setValue(ac);
+
+
+      //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
 
 
     private static class AdapterImageSlider extends PagerAdapter {
@@ -404,4 +499,21 @@ public class NewDashbord extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,
+                        permissions,
+                        grantResults);
+
+        if(requestCode == REQUEST_LOCATION) {
+
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                System.out.println("Location permissions granted, starting location");
+
+
+            }
+        }
+    }
 }

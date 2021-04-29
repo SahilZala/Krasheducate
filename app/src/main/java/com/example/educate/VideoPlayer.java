@@ -39,6 +39,7 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
     TimerCounter vp,st;
     String userid = "";
     String topicid = "";
+    String topicname = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,11 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
 
         topicid = getIntent().getStringExtra("topicid");
 
+        topicname = getIntent().getStringExtra("topicname");
+
         userid = getOUid();
+
+        getAddress();
 
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
 
@@ -267,6 +272,37 @@ public class VideoPlayer extends YouTubeBaseActivity implements YouTubePlayer.On
         return i;
     }
 
+
+    void createHistory(String changes_in,String changes_in_id,String message,String address)
+    {
+        DatabaseReference hist = FirebaseDatabase.getInstance().getReference("History");
+        String histid = hist.push().getKey();
+
+        History h = new History(histid,getOUid(),changes_in,changes_in_id,message,SystemTool.getCurrent_time(),SystemTool.getCurrent_date(),"true",address);
+
+
+        hist.child(getOUid()).child(histid).setValue(h);
+    }
+
+
+    void getAddress()
+    {
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid()).child("address");
+        dref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                AddressClass ac = snapshot.getValue(AddressClass.class);
+
+                createHistory("Topic",topicid,"Watching "+topicname+" video.",ac.address);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 }
 class TimerCounter extends Thread
 {
@@ -309,4 +345,6 @@ class TimerCounter extends Thread
     {
        ispaused = false;
     }
+
+
 }

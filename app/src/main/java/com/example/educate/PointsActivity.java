@@ -32,6 +32,8 @@ public class PointsActivity extends AppCompatActivity {
     TextView score;
 
     MaterialButton request;
+    String activation = "";
+    int points = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,8 @@ public class PointsActivity extends AppCompatActivity {
         request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PointsActivity.this, "request sended to make money", Toast.LENGTH_SHORT).show();
+
+                sendRequestToEarn();
             }
         });
 
@@ -108,6 +111,9 @@ public class PointsActivity extends AppCompatActivity {
                         progressBar.setProgress(p);
                 score.setText(String.valueOf(p)+"%");
 
+                points = p;
+
+               activation =  ud.getActivation();
 
             }
 
@@ -133,5 +139,32 @@ public class PointsActivity extends AppCompatActivity {
         }
         return i;
     }
+
+    void sendRequestToEarn()
+    {
+        if(!activation.equalsIgnoreCase("notnotice")) {
+            if(points >= 100) {
+                DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Request");
+
+                String id = dref.push().getKey();
+
+                PointsRequest pr = new PointsRequest(id,getOUid(),SystemTool.getCurrent_date(),SystemTool.getCurrent_time(),"true");
+
+                dref.child(id).setValue(pr);
+
+                Toast.makeText(PointsActivity.this, "request sended to make money", Toast.LENGTH_SHORT).show();
+
+            }
+            else {
+                Toast.makeText(this, "Points should be more then 100%", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(this, "You cant send request", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
 }

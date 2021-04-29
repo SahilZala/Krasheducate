@@ -49,6 +49,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,7 +71,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class NewProfileActivity extends AppCompatActivity {
 
-    CardView refer_earn_card,logout_card,comment_feedback;
+    CardView refer_earn_card,logout_card,comment_feedback,change_password;
 
     TextView username,useremail,points;
     TextView video,nots;
@@ -91,6 +93,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
         comment_feedback = findViewById(R.id.comment_feedback);
         profile_image = findViewById(R.id.profile_image);
+        change_password = findViewById(R.id.change_password);
 
         video = findViewById(R.id.video_c);
         nots = findViewById(R.id.nots_c);
@@ -132,6 +135,13 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        change_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePassword();
+            }
+        });
 
 
         getNotificationColor();
@@ -877,6 +887,65 @@ public class NewProfileActivity extends AppCompatActivity {
 //               // sendDataToFirebase("snap");
 //            }
         }
+    }
+
+
+    void changePassword()
+    {
+        ImageButton cancel_dialog;
+        MaterialButton update;
+        TextInputEditText passw;
+        TextView textView01;
+
+        TextInputLayout email_input_layout;
+        //    CircularImageView profile;
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.update_email);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        cancel_dialog = dialog.findViewById(R.id.cancel_dialog);
+        passw = dialog.findViewById(R.id.user_email_update);
+        update = dialog.findViewById(R.id.useremail_update);
+        textView01 = dialog.findViewById(R.id.textView01);
+        email_input_layout = dialog.findViewById(R.id.email_text_input_layout);
+
+        textView01.setText("Change Password");
+        email_input_layout.setHint("Password");
+
+
+        cancel_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(passw.getText().toString().isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(), "Please eneter some text!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    DatabaseReference dref = FirebaseDatabase.getInstance().getReference("UserData").child(getOUid());
+                    dref.child("password").setValue(passw.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            getCurrentUserData();
+                            dialog.cancel();
+                            Toast.makeText(getApplicationContext(), "password updated!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
+        dialog.show();
     }
 
 }
