@@ -8,6 +8,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -58,7 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class NewDashbord extends AppCompatActivity implements LocationListener {
+public class NewDashbord extends AppCompatActivity {
 
     private ViewPager viewPager;
     private LinearLayout layout_dots;
@@ -76,7 +77,7 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
     private static final int ACCESS_COARSE_LOCATION = 102;
     private static final int REQUEST_LOCATION = 123;
 
-    LinearLayout learning, setting, points,noti, logout;
+    LinearLayout learning, setting, points, noti, logout;
 
     LocationManager locationManager;
 
@@ -85,7 +86,11 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_dashbord);
 
+        getUserData();
+
         FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+
 
 //
 //        FirebaseMessaging.getInstance().getToken()
@@ -114,6 +119,7 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
 
         initComponent();
 
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -134,14 +140,32 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
 
         } else {
 
-            System.out.println("Location permissions available, starting location");
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            Geocoder geocoder;
+            geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0),addresses.get(0).getAddressLine(0));
+                DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
+                dref.child("address").setValue(ac);
+
+
+                //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            //    System.out.println("Location permissions available, starting location");
 
         }
 
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        onLocationChanged(location);
+
+
 
         getNotificationColor();
 
@@ -198,12 +222,6 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
 
 
     private void initComponent() {
-
-
-
-
-
-
 
 
         layout_dots = (LinearLayout) findViewById(R.id.layout_dots);
@@ -299,44 +317,26 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        double lat = location.getLatitude();
-        double log = location.getLongitude();
-
-
-        Geocoder geocoder;
-        geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-            AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0),addresses.get(0).getAddressLine(0));
-            DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
-            dref.child("address").setValue(ac);
-
-
-      //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-
-    }
-
+//    @Override
+//    public void onLocationChanged(@NonNull Location location) {
+//
+//        Geocoder geocoder;
+//        geocoder = new Geocoder(this, Locale.getDefault());
+//        try {
+//            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+//
+//            AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0),addresses.get(0).getAddressLine(0));
+//            DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
+//            dref.child("address").setValue(ac);
+//
+//
+//      //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
 
     private static class AdapterImageSlider extends PagerAdapter {
 
@@ -506,14 +506,60 @@ public class NewDashbord extends AppCompatActivity implements LocationListener {
                         permissions,
                         grantResults);
 
-        if(requestCode == REQUEST_LOCATION) {
+            if(requestCode == REQUEST_LOCATION) {
 
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-                System.out.println("Location permissions granted, starting location");
+                Geocoder geocoder;
+                geocoder = new Geocoder(this, Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
+                    AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0), addresses.get(0).getAddressLine(0));
+                    DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
+                    dref.child("address").setValue(ac);
+
+
+                    //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+        }
+    }
+
+
+    void getUserData(){
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("UserData").child(getOUid());
+        dref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserData ud =  snapshot.getValue(UserData.class);
+
+                if(ud != null) {
+                    if (ud.getActivation().equalsIgnoreCase("true") || ud.getActivation().equalsIgnoreCase("active") || ud.getActivation().equalsIgnoreCase("notnotice")) {
+
+                    }
+                    else
+                    {
+                        System.exit(0);
+                        Toast.makeText(NewDashbord.this, "you are block by the admin, for more information please contact to admin", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else
+                {
+                    finish();
+                    Toast.makeText(NewDashbord.this, "Your account is deleted from server, please call to admin", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        }
+        });
     }
 }
