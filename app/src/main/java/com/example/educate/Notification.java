@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Notification extends AppCompatActivity {
 
@@ -117,7 +119,7 @@ public class Notification extends AppCompatActivity {
 
     void setAdapter()
     {
-
+        Collections.reverse(notificationClasses);
         progressBar1.setVisibility(View.INVISIBLE);
 
         noti_recycler_view.setLayoutManager(new LinearLayoutManager(this));

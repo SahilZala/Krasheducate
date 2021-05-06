@@ -1,20 +1,21 @@
 {
   "project_info": {
-    "project_number": "682402474385",
-    "project_id": "krashcompany-c0534",
-    "storage_bucket": "krashcompany-c0534.appspot.com"
+    "project_number": "297201849065",
+    "firebase_url": "https://education-aea0a-default-rtdb.firebaseio.com",
+    "project_id": "education-aea0a",
+    "storage_bucket": "education-aea0a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:682402474385:android:46eb36ca0ab07c76411230",
+        "mobilesdk_app_id": "1:297201849065:android:d2e03ccdd983baac721678",
         "android_client_info": {
           "package_name": "com.example.educate"
         }
       },
       "oauth_client": [
         {
-          "client_id": "682402474385-449ev02el4cqp6llhnlh8dnodoh5skd2.apps.googleusercontent.com",
+          "client_id": "297201849065-8lfeb2mur2t2gd2pri4rv4gci3fbacpm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.educate",
@@ -22,57 +23,20 @@
           }
         },
         {
-          "client_id": "682402474385-9bg65vl2sqnp21h62a6fo9mlh6lkd508.apps.googleusercontent.com",
+          "client_id": "297201849065-q9lb16slv1vgogkdl78gi5kbebm61iki.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA9oRFb0KXBZquGgVuOL92USla81qbQLy0"
+          "current_key": "AIzaSyCCYyfZ1dqfdLLUABpvY_hULWiUVqfi4bE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "682402474385-9bg65vl2sqnp21h62a6fo9mlh6lkd508.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:682402474385:android:d97a98d929965a0a411230",
-        "android_client_info": {
-          "package_name": "com.inception.krash_company"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "682402474385-qloo8ii2o5b1ke779t89949on2jjc94i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.inception.krash_company",
-            "certificate_hash": "2029cc6539b878f8235af38bd2ed545cc37e9b9a"
-          }
-        },
-        {
-          "client_id": "682402474385-9bg65vl2sqnp21h62a6fo9mlh6lkd508.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA9oRFb0KXBZquGgVuOL92USla81qbQLy0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "682402474385-9bg65vl2sqnp21h62a6fo9mlh6lkd508.apps.googleusercontent.com",
+              "client_id": "297201849065-q9lb16slv1vgogkdl78gi5kbebm61iki.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -141,7 +141,7 @@
                                         android:id="@+id/user_image_profile2"
                                         android:layout_height="35dp"
                                         android:layout_width="35dp"
-                                        android:background="@drawable/download"
+                                        android:background="@drawable/profile"
                                         />
                                 </androidx.cardview.widget.CardView>
 

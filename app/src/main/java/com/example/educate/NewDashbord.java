@@ -22,6 +22,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -81,140 +82,16 @@ public class NewDashbord extends AppCompatActivity {
 
     LocationManager locationManager;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_dashbord);
-
         getUserData();
-
-        FirebaseMessaging.getInstance().subscribeToTopic("all");
-
-
-
-//
-//        FirebaseMessaging.getInstance().getToken()
-//                .addOnCompleteListener(new OnCompleteListener<String>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<String> task) {
-//                        if (!task.isSuccessful()) {
-//                            Log.w("tag", "Fetching FCM registration token failed", task.getException());
-//                            return;
-//                        }
-//
-//                        // Get new FCM registration token
-//                        String token = task.getResult();
-//
-//                        Log.i(token,token);
-//
-//                        Toast.makeText(NewDashbord.this, ""+token, Toast.LENGTH_SHORT).show();
-//                        // Log and toast
-//
-//
-//                        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Token");
-//                        dref.child(getOUid()).child("token").setValue(token);
-//
-//                    }
-//                });
-
-        initComponent();
-
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-
-                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-
-                            Manifest.permission.CAMERA,
-
-                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_LOCATION);
-
-        } else {
-
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            Geocoder geocoder;
-            geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-                AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0),addresses.get(0).getAddressLine(0));
-                DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
-                dref.child("address").setValue(ac);
-
-
-                //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            //    System.out.println("Location permissions available, starting location");
-
-        }
-
-
-
-
 
 
         getNotificationColor();
 
-        new_name = findViewById(R.id.new_username);
-        learning = findViewById(R.id.learning);
-        setting = findViewById(R.id.setting);
-        points = findViewById(R.id.points);
-        noti = findViewById(R.id.notice);
-        logout = findViewById(R.id.logout);
-
-        fetchData();
-        learning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SubjectActivity.class));
-            }
-        });
-
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), NewProfileActivity.class));
-                finish();
-            }
-        });
-
-        noti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Notification.class));
-            }
-        });
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
-
-        points.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                FcmNotificationsSender fns = new FcmNotificationsSender("/topics/all","title","sahil hii",getApplicationContext(),NewDashbord.this);
-//
-//                fns.SendNotifications();
-                startActivity(new Intent(getApplicationContext(), PointsActivity.class));
-            }
-        });
 
     }
 
@@ -533,33 +410,172 @@ public class NewDashbord extends AppCompatActivity {
 
 
     void getUserData(){
-        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("UserData").child(getOUid());
-        dref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserData ud =  snapshot.getValue(UserData.class);
 
-                if(ud != null) {
-                    if (ud.getActivation().equalsIgnoreCase("true") || ud.getActivation().equalsIgnoreCase("active") || ud.getActivation().equalsIgnoreCase("notnotice")) {
+        try {
+            DatabaseReference dref = FirebaseDatabase.getInstance().getReference("UserData").child(getOUid());
+            dref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                    if(snapshot != null) {
+
+                        UserData ud =  snapshot.getValue(UserData.class);
+
+                        if(ud != null) {
+                            if (ud.getActivation().equalsIgnoreCase("true") || ud.getActivation().equalsIgnoreCase("active") || ud.getActivation().equalsIgnoreCase("notnotice")) {
+
+                                setContentView(R.layout.activity_new_dashbord);
+
+
+                                insta = findViewById(R.id.insta);
+
+                                insta.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Uri uriUrl = Uri.parse("https://www.graphicsera.org/dm/");
+                                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                                        startActivity(launchBrowser);
+                                    }
+                                });
+
+                                FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+
+                                initComponent();
+
+
+                                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+
+                                        ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+
+                                        ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                                    ActivityCompat.requestPermissions(NewDashbord.this,
+
+                                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+
+                                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+
+                                                    Manifest.permission.CAMERA,
+
+                                                    Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_LOCATION);
+
+                                } else {
+
+                                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                                    Geocoder geocoder;
+                                    geocoder = new Geocoder(NewDashbord.this, Locale.getDefault());
+                                    try {
+                                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                                        AddressClass ac = new AddressClass(addresses.get(0).getAddressLine(0),addresses.get(0).getAddressLine(0));
+                                        DatabaseReference dref = FirebaseDatabase.getInstance().getReference("Address").child(getOUid());
+                                        dref.child("address").setValue(ac);
+
+
+                                        //      Toast.makeText(this, ""+addresses.get(0).getAddressLine(0), Toast.LENGTH_SHORT).show();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                    //    System.out.println("Location permissions available, starting location");
+
+                                }
+
+
+
+                                new_name = findViewById(R.id.new_username);
+                                learning = findViewById(R.id.learning);
+                                setting = findViewById(R.id.setting);
+                                points = findViewById(R.id.points);
+                                noti = findViewById(R.id.notice);
+                                logout = findViewById(R.id.logout);
+
+                                fetchData();
+                                learning.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(getApplicationContext(), SubjectActivity.class));
+                                    }
+                                });
+
+                                setting.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(getApplicationContext(), NewProfileActivity.class));
+                                        finish();
+                                    }
+                                });
+
+                                noti.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(getApplicationContext(), Notification.class));
+                                    }
+                                });
+
+                                logout.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        logout();
+                                    }
+                                });
+
+                                points.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+//                FcmNotificationsSender fns = new FcmNotificationsSender("/topics/all","title","sahil hii",getApplicationContext(),NewDashbord.this);
+//
+//                fns.SendNotifications();
+                                        startActivity(new Intent(getApplicationContext(), PointsActivity.class));
+                                    }
+                                });
+
+
+                            } else {
+
+                                //System.exit(0);
+                                Toast.makeText(NewDashbord.this, "you are block by the admin, for more information please contact to admin", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else
+                        {
+                            db = openOrCreateDatabase("UserData", MODE_PRIVATE, null);
+                            db.execSQL("drop table userdata;");
+
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                           // dialog.cancel();
+                            finish();
+
+                            Toast.makeText(NewDashbord.this, "Your account is deleted from server, please call to admin", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else
                     {
-                        System.exit(0);
-                        Toast.makeText(NewDashbord.this, "you are block by the admin, for more information please contact to admin", Toast.LENGTH_SHORT).show();
+                        db = openOrCreateDatabase("UserData", MODE_PRIVATE, null);
+                        db.execSQL("drop table userdata;");
+
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                        dialog.cancel();
+                        finish();
+
+                        Toast.makeText(NewDashbord.this, "Your account is deleted from server, please call to admin", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else
-                {
-                    finish();
-                    Toast.makeText(NewDashbord.this, "Your account is deleted from server, please call to admin", Toast.LENGTH_SHORT).show();
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
-            }
+            });
+        }
+        catch (Exception ex)
+        {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        }
     }
 }

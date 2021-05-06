@@ -143,7 +143,7 @@
 
                         <TextView
                             android:gravity="center"
-                            android:text="Reach to 100 points and make money "
+                            android:text="Reach to 100 points and unlock your reward"
                             android:textSize="15dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
                 android:backgroundTint="@color/dark_blue"
                 android:fontFamily="@font/roboto_bold"
                 android:paddingTop="5dp"
-                android:text="Send request to earn"
+                android:text="unlock your reward"
                 android:textColor="@color/cream_white"
                 app:cornerRadius="5dp" />
 
