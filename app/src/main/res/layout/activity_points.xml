@@ -8,7 +8,7 @@
 
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".PointsActivity">
+    tools:context="com.educate.educate.PointsActivity">
 
 
     <include layout="@layout/toolbar2" />

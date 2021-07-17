@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.educate">
+    package="com.educate.educate"
+
+    >
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
+
 
     <queries>
         <intent>
@@ -21,41 +25,41 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon_app"
-        android:label="App Digital Marketing and Promotions"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="Learn Digital Marketing and Promotions"
+        android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
         android:theme="@style/Theme.Educate">
-        <activity android:name=".Notification"></activity>
+        <activity android:name="com.educate.educate.Notification"></activity>
         <activity
-            android:name=".PointsActivity"
+            android:name="com.educate.educate.PointsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ScanneQRCode" />
-        <activity android:name=".NewProfileActivity" />
-        <activity android:name=".WordFileVIewer" />
-        <activity android:name=".IntroScreen">
+        <activity android:name="com.educate.educate.ScanneQRCode" />
+        <activity android:name="com.educate.educate.NewProfileActivity" />
+        <activity android:name="com.educate.educate.WordFileVIewer" />
+        <activity android:name="com.educate.educate.IntroScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ForgotPassword" />
-        <activity android:name=".SubjectActivity" />
-        <activity android:name=".NewDashbord" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".Profile" />
-        <activity android:name=".PDFViewerActivity" />
+        <activity android:name="com.educate.educate.ForgotPassword" />
+        <activity android:name="com.educate.educate.SubjectActivity" />
+        <activity android:name="com.educate.educate.NewDashbord" />
+        <activity android:name="com.educate.educate.ProfileActivity" />
+        <activity android:name="com.educate.educate.Profile" />
+        <activity android:name="com.educate.educate.PDFViewerActivity" />
         <activity
-            android:name=".VideoPlayer"
+            android:name="com.educate.educate.VideoPlayer"
             android:screenOrientation="landscape" />
-        <activity android:name=".TopicActivity" />
-        <activity android:name=".Dashbord" />
-        <activity android:name=".OtpActivity" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.educate.educate.TopicActivity" />
+        <activity android:name="com.educate.educate.Dashbord" />
+        <activity android:name="com.educate.educate.OtpActivity" />
+        <activity android:name="com.educate.educate.SignUp" />
+        <activity android:name="com.educate.educate.MainActivity" />
 
         <service
-            android:name=".FirebaseMessagingService"
+            android:name="com.educate.educate.FirebaseMessagingService"
             android:permission="TODO"
             tools:ignore="ExportedService">
             <intent-filter>

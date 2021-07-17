@@ -55,13 +55,15 @@
                 android:layout_width="20dp"/>
 
             <LinearLayout
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:orientation="vertical"
                 >
 
 
                 <TextView
+
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
 
@@ -69,7 +71,6 @@
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/black_mate_2"
                     android:textSize="16dp"
-                    android:maxLength="15"
                     android:id="@+id/item_subject_name"
 
                     />
@@ -93,6 +94,7 @@
 
 
             <RelativeLayout
+                android:layout_weight="1"
                 android:gravity="right"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
